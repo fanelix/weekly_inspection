@@ -28,3 +28,32 @@ test('native Drive: new radar is registered once, listed for everyone and normal
 test('native Drive: radar IDs are validated before anything is written',async()=>{const drive=fakeDrive(),svc=createInspectionService({drive,config:testConfig}),before=drive.files.size;for(const bad of ['','X','a/b','H-29;DROP',"x'y",'<b>','A'.repeat(25),null])await assert.rejects(svc.addRadar({id:bad}),/ID radar/);assert.equal(drive.files.size,before);});
 test('native Drive: inspection accepts a registered radar and rejects an unknown one',async()=>{const drive=fakeDrive(),svc=createInspectionService({drive,config:testConfig});await assert.rejects(svc.allocate(radarPayload('H-31')),/Lengkapi/);await svc.addRadar({id:'H-31'});const p=radarPayload('H-31'),a=await svc.allocate(p);await svc.begin({...p,uploadTicket:a.uploadTicket});await svc.commit({uploadTicket:a.uploadTicket});const listed=await svc.list({type:'RADAR'});assert.equal(listed.items.length,1);assert.equal(listed.items[0].unit,'H-31');const builtin=radarPayload('H-29');assert.ok((await svc.allocate(builtin)).id);});
 test('native Drive: registry entries ignore foreign JSON files and cap the list',async()=>{const drive=fakeDrive(),svc=createInspectionService({drive,config:testConfig});await drive.createFile({id:'foreign-json-1',name:'notes.json',parent:testConfig.folderIds.RADAR,mimeType:'application/json',body:'{}'});await drive.createFile({id:'foreign-json-2',name:'radar-registry-lower-case.json',parent:testConfig.folderIds.RADAR,mimeType:'application/json',body:'{}'});assert.deepEqual((await svc.radars()).radars,[]);for(let i=0;i<100;i++)await drive.createFile({id:'seed-radar-'+String(i).padStart(3,'0'),name:'radar-registry-R'+i+'.json',parent:testConfig.folderIds.RADAR,mimeType:'application/json',body:'{}'});await assert.rejects(svc.addRadar({id:'R-NEW'}),/penuh/);});
+
+async function oldRecord(type,answers,photos={}){
+ const drive=fakeDrive(),svc=createInspectionService({drive,config:testConfig}),id='historical-report-01';
+ await drive.createFile({id,name:id,parent:testConfig.folderIds[type],mimeType:'application/vnd.google-apps.folder'});
+ const record={schemaVersion:1,id,type,model:type==='RTS'?'Leica TM60':'Radar',answers,photos,savedAt:'2026-10-04T05:00:00Z',receiptHash:createHash('sha256').update('a'.repeat(64)).digest('hex')};
+ await drive.createFile({id:'historical-record-json',name:'inspection.json',parent:id,mimeType:'application/json',body:JSON.stringify(record)});
+ return {drive,svc,auth:{type,id,key:'a'.repeat(64)}};
+}
+test('native Drive: old radar faults remain visible in history and CSV after checklist removal',async()=>{
+ const answers={...radarPayload('H-29').answers,Controller_Section_Status:'Diperiksa',Controller_Alarm:'Ada masalah',Controller_Notes:'Alarm still active',Technician_Name:'Ada masalah'};
+ const {svc,auth}=await oldRecord('RADAR',answers),read=await svc.read(auth);
+ assert.match(read.csv,/Controller_Alarm/);assert.match(read.csv,/Alarm still active/);
+ assert.equal(read.record.fields.find(f=>f.name==='Controller_Alarm').section,'Modul controller & komunikasi');
+ assert.equal((await svc.list({type:'RADAR'})).items[0].status,'Ada masalah');
+});
+test('native Drive: historical Moxa photograph remains authorized and downloadable',async()=>{
+ const photos={RTS_Network_Image:{id:'historical-photo-id',name:'RTS_Network_Image.jpg',type:'image/jpeg',size:bytes.length}},answers={...payload(false).answers,RTS_Network_Image:'RTS/historical-report-01/RTS_Network_Image.jpg'};
+ const {drive,svc,auth}=await oldRecord('RTS',answers,photos);
+ await drive.createFile({id:'historical-photo-id',name:'RTS_Network_Image.jpg',parent:auth.id,mimeType:'image/jpeg',body:bytes});
+ assert.equal((await svc.readPhoto({...auth,field:'RTS_Network_Image'})).data,bytes.toString('base64'));
+ await assert.rejects(svc.readPhoto({...auth,key:'b'.repeat(64),field:'RTS_Network_Image'}),/Kunci/);
+ drive.files.get('historical-photo-id').parents=[testConfig.rootFolderId];
+ await assert.rejects(svc.readPhoto({...auth,field:'RTS_Network_Image'}),/folder/);
+});
+test('native Drive: reserved Other label cannot become an unusable shared radar ID',async()=>{
+ const drive=fakeDrive(),svc=createInspectionService({drive,config:testConfig}),before=drive.files.size;
+ await assert.rejects(svc.addRadar({id:' lainnya '}),/ID radar/);
+ assert.equal(drive.files.size,before);
+});

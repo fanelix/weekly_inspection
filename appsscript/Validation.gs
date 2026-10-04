@@ -37,9 +37,19 @@ function validate_(type,input,imageNames,extraOptions) {
   pairs.forEach(function(pair){if(answers[pair[0]]!==''&&!answers[pair[1]])add(pair[1],'Isi satuan sesuai display.');});
   return {answers:answers,errors:errors};
 }
-function csv_(type,answers) {
+function reportSchema_(type,answers,photoNames) {
+  var spec=schema_(type),photos=new Set(photoNames||[]),fields=spec.fields.concat((spec.legacyFields||[]).filter(function(f){return Object.prototype.hasOwnProperty.call(answers||{},f.name)||photos.has(f.name);}).map(function(f){var current=spec.fields.find(function(n){return n.prefix===f.prefix;});return Object.assign({},f,{section:current?current.section:f.section});}));
+  return {type:spec.type,title:spec.title,model:spec.model,sections:spec.sections,fields:fields};
+}
+function csvReports_(type,records) {
+  if(!records.length)return '';
+  var fields=schema_(type).fields.slice(),names=new Set(fields.map(function(f){return f.name;}));
+  records.forEach(function(r){if(r.type!==type)throw new Error('Jenis peralatan harus sama.');reportSchema_(type,r.answers,(r.photos||[]).map(function(p){return p.field;})).fields.forEach(function(f){if(!names.has(f.name)){names.add(f.name);fields.push(f);}});});
+  return csvJoin_(records.map(function(r){return csv_(type,r.answers,fields);}));
+}
+function csv_(type,answers,reportFields) {
   function cell(value){var s=String(value===undefined?'':value);if(/^[=+@\-\t\r\n]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';}
-  var fields=schema_(type).fields;return fields.map(function(f){return f.name;}).join(',')+'\r\n'+fields.map(function(f){return cell(answers[f.name]);}).join(',')+'\r\n';
+  var fields=reportFields||schema_(type).fields;return fields.map(function(f){return f.name;}).join(',')+'\r\n'+fields.map(function(f){return cell(answers[f.name]);}).join(',')+'\r\n';
 }
 function csvJoin_(parts) {
   if(!parts.length)return '';

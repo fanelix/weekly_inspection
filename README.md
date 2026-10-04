@@ -11,14 +11,14 @@ Versi 2 berjalan tanpa Google Apps Script. [Panduan deployment Vercel](docs/verc
 - Header menampilkan logo resmi PT Bumi Suksesindo dari `web/assets/bsi-logo.png` (lihat `web/assets/README.md` untuk mengganti).
 - Leica TM60: nivo/level, lensa/bodi, dudukan, panel/kelistrikan, Moxa/jaringan (indikator Moxa dan kondisi kabel), solar, baterai/charge controller, serta area alat.
 - Kamera atau galeri per bagian; kompresi otomatis, maksimum 1 MB/foto dan 8 MB total. Foto dikirim satu per request.
-- Diperiksa / Tidak diperiksa / N/A; kondisi tidak dipilih otomatis. Catatan wajib untuk masalah dan item yang tidak diperiksa.
+- Diperiksa / Tidak diperiksa / N/A; kondisi tidak dipilih otomatis. Catatan wajib untuk masalah dan item yang tidak diperiksa pada bagian yang menyediakan kolom catatan; masalah tetap membutuhkan rangkuman temuan.
 - Pembacaan aktual opsional dengan satuan sesuai display. Nilai kosong tidak menjadi nol; aplikasi tidak menginventarisasi ambang alarm alat.
 - ID Drive dialokasikan sebelum menulis dan disimpan dalam draf. Percobaan ulang memakai ID tetap; laporan belum lengkap tidak masuk riwayat.
 - Draf jawaban dalam tab browser; foto yang belum terkirim perlu dilampirkan ulang setelah reload. Bila draf gagal disimpan, pengiriman belum dimulai.
 - Bukti pengiriman, CSV, ZIP beserta foto, laporan terstruktur, dan cetak / Save as PDF.
 - Riwayat admin dengan filter peralatan, unit, kondisi, tanggal, pagination, dan ekspor data yang sudah dimuat.
 - Password admin dengan cookie HttpOnly satu jam, PIN teknisi opsional, secret hanya di server.
-- Laporan UUID dari Apps Script tetap dapat dibaca.
+- Laporan UUID dari Apps Script tetap dapat dibaca. Item dan foto yang dihapus dari form baru tetap tampil pada laporan terdahulu, status riwayat, CSV, ZIP, serta cetak/PDF. Ekspor gabungan mempertahankan kolom historis tanpa mewajibkannya pada inspeksi baru.
 
 ## Penyimpanan
 
@@ -69,6 +69,8 @@ Setelah mengubah schema/validasi, jalankan `npm run sync-rules`, `npm run sync-d
 ## Uji dan batas operasional
 
 Tes menggunakan adapter Drive memori dan HTTP lokal; tidak membuktikan OAuth atau upload produksi sudah aktif. Lakukan uji Radar dan RTS melalui deployment sesuai panduan sebelum digunakan tim.
+
+[Audit perubahan checklist 4 Oktober 2026](docs/audit-2026-10-04.md) mencatat cakupan pemeriksaan dan perbaikan kompatibilitas laporan.
 
 Tiket upload berlaku 24 jam. Jawaban/foto tidak dapat diganti setelah transaksi dimulai; buat inspeksi baru bila berubah. Riwayat membaca halaman Drive bertahap; urutan tanggal terbaru berlaku pada data yang sudah dimuat. Tidak ada endpoint hapus laporan. Batas login per-instance bersifat best effort; gunakan konfigurasi Firewall Vercel bila membutuhkan pembatasan lintas-instance.
 

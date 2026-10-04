@@ -1839,6 +1839,63 @@ var WI_SCHEMAS_ = {
 };
 function schema_(type) { if (!Object.prototype.hasOwnProperty.call(WI_SCHEMAS_, type)) throw new Error("Jenis inspeksi tidak valid."); return WI_SCHEMAS_[type]; }
 
+// Archived metadata is used only to read saved reports; it is never part of the new form.
+WI_SCHEMAS_.RADAR.legacyFields = [
+  {"name":"Genset_Fuel_Leak","label":"Kondisi terkait kebocoran bahan bakar","section":"Genset","type":"Enum","prefix":"Genset","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"Genset_Oil_Leak","label":"Kondisi terkait kebocoran oli","section":"Genset","type":"Enum","prefix":"Genset","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"Genset_Air_Filter","label":"Kondisi filter udara","section":"Genset","type":"Enum","prefix":"Genset","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"Genset_Oil_Filter","label":"Kondisi filter oli","section":"Genset","type":"Enum","prefix":"Genset","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"Genset_Fuel_Filter","label":"Kondisi filter bahan bakar","section":"Genset","type":"Enum","prefix":"Genset","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"Genset_Battery_Terminals","label":"Terminal baterai starter","section":"Genset","type":"Enum","prefix":"Genset","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"Genset_Charging","label":"Charging baterai starter","section":"Genset","type":"Enum","prefix":"Genset","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"Genset_Alarm","label":"Kondisi alarm genset","section":"Genset","type":"Enum","prefix":"Genset","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"Genset_Serial_Number","label":"Nomor seri genset","section":"Genset","type":"Text","prefix":"Genset","options":[]},
+  {"name":"Genset_Run_Hours","label":"Running hours genset (jam)","section":"Genset","type":"Decimal","prefix":"Genset","options":[]},
+  {"name":"Controller_Module","label":"Kondisi modul controller","section":"Modul controller & komunikasi","type":"Enum","prefix":"Controller","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"Controller_Cables_Connectors","label":"Kabel dan konektor controller","section":"Modul controller & komunikasi","type":"Enum","prefix":"Controller","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"Controller_Alarm","label":"Kondisi alarm controller","section":"Modul controller & komunikasi","type":"Enum","prefix":"Controller","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"Controller_Camera_Transfer","label":"Transfer gambar kamera","section":"Modul controller & komunikasi","type":"Enum","prefix":"Controller","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"Controller_WNC_RDP","label":"Koneksi WNC / RDP","section":"Modul controller & komunikasi","type":"Enum","prefix":"Controller","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"Controller_PSV_Transmission","label":"Transmisi PSV","section":"Modul controller & komunikasi","type":"Enum","prefix":"Controller","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"Controller_Guardian_Sync","label":"Sinkronisasi controller dengan Guardian","section":"Modul controller & komunikasi","type":"Enum","prefix":"Controller","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"Controller_SW_Version","label":"Versi software controller","section":"Modul controller & komunikasi","type":"Text","prefix":"Controller","options":[]},
+  {"name":"Controller_HDD_Free_Value","label":"Sisa kapasitas HDD","section":"Modul controller & komunikasi","type":"Decimal","prefix":"Controller","options":[]},
+  {"name":"Controller_HDD_Free_Unit","label":"Satuan kapasitas HDD","section":"Modul controller & komunikasi","type":"Enum","prefix":"Controller","options":["GB","TB","MB"]},
+  {"name":"Controller_Notes","label":"Catatan Modul controller & komunikasi","section":"Modul controller & komunikasi","type":"LongText","prefix":"Controller","options":[]},
+  {"name":"Solar_Panel_Condition","label":"Kondisi fisik panel","section":"Solar panel","type":"Enum","prefix":"Solar","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"Solar_Surge_Protector","label":"Surge protector","section":"Solar panel","type":"Enum","prefix":"Solar","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"Solar_Charging","label":"Status supply / charging solar","section":"Solar panel","type":"Enum","prefix":"Solar","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"Solar_Output_Value","label":"Output solar pada display","section":"Solar panel","type":"Decimal","prefix":"Solar","options":[]},
+  {"name":"Solar_Output_Unit","label":"Satuan output solar","section":"Solar panel","type":"Enum","prefix":"Solar","options":["W","V","A"]},
+  {"name":"Solar_Notes","label":"Catatan Solar panel","section":"Solar panel","type":"LongText","prefix":"Solar","options":[]},
+  {"name":"Weather_Sensor_Cleanliness","label":"Kebersihan sensor cuaca","section":"Weather station","type":"Enum","prefix":"Weather","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"Weather_Mast_Cables_Connectors","label":"Mast, kabel dan konektor","section":"Weather station","type":"Enum","prefix":"Weather","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"Weather_Readings_Available","label":"Ketersediaan pembacaan cuaca","section":"Weather station","type":"Enum","prefix":"Weather","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"Weather_Rainfall_Value","label":"Rainfall","section":"Weather station","type":"Decimal","prefix":"Weather","options":[]},
+  {"name":"Weather_Rainfall_Unit","label":"Satuan rainfall","section":"Weather station","type":"Text","prefix":"Weather","options":[]},
+  {"name":"Weather_Rainfall_Period","label":"Periode rainfall pada display","section":"Weather station","type":"Text","prefix":"Weather","options":[]},
+  {"name":"Weather_Temperature_Value","label":"Temperature","section":"Weather station","type":"Decimal","prefix":"Weather","options":[]},
+  {"name":"Weather_Temperature_Unit","label":"Satuan temperature","section":"Weather station","type":"Enum","prefix":"Weather","options":["°C","°F"]},
+  {"name":"Weather_Pressure_Value","label":"Barometric pressure","section":"Weather station","type":"Decimal","prefix":"Weather","options":[]},
+  {"name":"Weather_Pressure_Unit","label":"Satuan pressure","section":"Weather station","type":"Enum","prefix":"Weather","options":["hPa","mbar","kPa","Pa"]},
+  {"name":"Weather_Humidity_Percent","label":"Humidity (%)","section":"Weather station","type":"Decimal","prefix":"Weather","options":[]},
+  {"name":"Weather_Wind_Speed_Value","label":"Wind speed","section":"Weather station","type":"Decimal","prefix":"Weather","options":[]},
+  {"name":"Weather_Wind_Speed_Unit","label":"Satuan wind speed","section":"Weather station","type":"Enum","prefix":"Weather","options":["m/s","km/h","knots"]},
+  {"name":"Weather_Wind_Direction","label":"Wind direction sesuai display","section":"Weather station","type":"Text","prefix":"Weather","options":[]},
+  {"name":"Weather_Notes","label":"Catatan Weather station","section":"Weather station","type":"LongText","prefix":"Weather","options":[]}
+];
+WI_SCHEMAS_.RTS.legacyFields = [
+  {"name":"RTS_Network_Moxa_Power","label":"Indikator power Moxa","section":"Moxa & jaringan","type":"Enum","prefix":"RTS_Network","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"RTS_Network_Moxa_Link","label":"Indikator link/activity Moxa","section":"Moxa & jaringan","type":"Enum","prefix":"RTS_Network","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"RTS_Network_Acquisition","label":"Status koneksi alat ke sistem akuisisi","section":"Moxa & jaringan","type":"Enum","prefix":"RTS_Network","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"RTS_Network_Latest_Data","label":"Waktu data terakhir sesuai interval monitoring","section":"Moxa & jaringan","type":"Enum","prefix":"RTS_Network","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"RTS_Network_Remote","label":"Akses jaringan/remote dari lokasi pemeriksaan","section":"Moxa & jaringan","type":"Enum","prefix":"RTS_Network","options":["Baik","Ada masalah","Tidak diperiksa","Tidak berlaku (N/A)"]},
+  {"name":"RTS_Network_Last_Data_Time","label":"Waktu data terakhir (WIB)","section":"Moxa & jaringan","type":"DateTime","prefix":"RTS_Network","options":[]},
+  {"name":"RTS_Network_IP_Label","label":"IP/label jaringan jika diperlukan","section":"Moxa & jaringan","type":"Text","prefix":"RTS_Network","options":[]},
+  {"name":"RTS_Network_Notes","label":"Catatan / alasan tidak diperiksa","section":"Moxa & jaringan","type":"LongText","prefix":"RTS_Network","options":[]},
+  {"name":"RTS_Network_Image","label":"Foto Moxa & jaringan","section":"Moxa & jaringan","type":"Image","prefix":"RTS_Network","options":[]}
+];
+
 function activeField_(field,answers) {
   if(field.type==='Show'||field.name==='Inspection_ID')return false;
   if(field.when&&answers[field.when.field]!==field.when.value)return false;
@@ -1878,9 +1935,19 @@ function validate_(type,input,imageNames,extraOptions) {
   pairs.forEach(function(pair){if(answers[pair[0]]!==''&&!answers[pair[1]])add(pair[1],'Isi satuan sesuai display.');});
   return {answers:answers,errors:errors};
 }
-function csv_(type,answers) {
+function reportSchema_(type,answers,photoNames) {
+  var spec=schema_(type),photos=new Set(photoNames||[]),fields=spec.fields.concat((spec.legacyFields||[]).filter(function(f){return Object.prototype.hasOwnProperty.call(answers||{},f.name)||photos.has(f.name);}).map(function(f){var current=spec.fields.find(function(n){return n.prefix===f.prefix;});return Object.assign({},f,{section:current?current.section:f.section});}));
+  return {type:spec.type,title:spec.title,model:spec.model,sections:spec.sections,fields:fields};
+}
+function csvReports_(type,records) {
+  if(!records.length)return '';
+  var fields=schema_(type).fields.slice(),names=new Set(fields.map(function(f){return f.name;}));
+  records.forEach(function(r){if(r.type!==type)throw new Error('Jenis peralatan harus sama.');reportSchema_(type,r.answers,(r.photos||[]).map(function(p){return p.field;})).fields.forEach(function(f){if(!names.has(f.name)){names.add(f.name);fields.push(f);}});});
+  return csvJoin_(records.map(function(r){return csv_(type,r.answers,fields);}));
+}
+function csv_(type,answers,reportFields) {
   function cell(value){var s=String(value===undefined?'':value);if(/^[=+@\-\t\r\n]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';}
-  var fields=schema_(type).fields;return fields.map(function(f){return f.name;}).join(',')+'\r\n'+fields.map(function(f){return cell(answers[f.name]);}).join(',')+'\r\n';
+  var fields=reportFields||schema_(type).fields;return fields.map(function(f){return f.name;}).join(',')+'\r\n'+fields.map(function(f){return cell(answers[f.name]);}).join(',')+'\r\n';
 }
 function csvJoin_(parts) {
   if(!parts.length)return '';
@@ -1888,4 +1955,4 @@ function csvJoin_(parts) {
   return header+'\r\n'+parts.map(function(part){var boundary=part.indexOf('\r\n');if(boundary<0||part.slice(0,boundary)!==header)throw new Error('Kolom CSV harus sama.');return part.slice(boundary+2);}).join('');
 }
 
-export {WI_SCHEMAS_ as schemas,schema_ as schema,activeField_ as activeField,validate_ as validate,csv_ as csv,csvJoin_ as csvJoin,validDate_ as validDate};
+export {WI_SCHEMAS_ as schemas,schema_ as schema,reportSchema_ as reportSchema,activeField_ as activeField,validate_ as validate,csv_ as csv,csvReports_ as csvReports,csvJoin_ as csvJoin,validDate_ as validDate};

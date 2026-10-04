@@ -13,7 +13,7 @@
 | `beginInspection` | Tiket upload; verifikasi jawaban sama, buat folder dan pending dengan ID tetap |
 | `uploadInspectionPhoto` | Tiket upload; satu foto base64, signature/type/size/SHA-256 cocok alokasi |
 | `commitInspection` | Tiket upload; periksa foto, CSV, lalu manifest lengkap paling akhir |
-| `getInspection` | Kunci bukti pengiriman sendiri, atau cookie admin dengan marker `token` |
+| `getInspection` | Kunci bukti pengiriman sendiri, atau cookie admin dengan marker `token`; metadata `record.fields` dan CSV mencakup item historis pada laporan tersebut |
 | `getInspectionPhoto` | Otorisasi laporan dan batas parent, ukuran serta digest foto baru |
 | `loginAdmin` | Tiket bootstrap + password; cookie HttpOnly, respons marker `cookie` tanpa token sesi |
 | `logoutAdmin` | Cookie admin; hapus cookie browser |
@@ -23,5 +23,9 @@
 Tiket bootstrap berlaku 15 menit, upload 24 jam, cookie admin 1 jam. Nama helper server bukan method publik. Retry memakai upload ticket dan ID yang sama; pengubahan isi membutuhkan inspeksi baru. Laporan Apps Script lama menggunakan UUID dan tetap dapat ditemukan berdasarkan nama folder.
 
 Radar tambahan hanya menambah file kecil `radar-registry-<ID>.json` di folder Radar; file itu bukan folder laporan sehingga tidak muncul di riwayat. ID radar yang tidak ada di daftar bawaan divalidasi terhadap registry saat `allocateInspection` dan `beginInspection`.
+
+`LAINNYA` tidak boleh digunakan sebagai ID radar baru karena merupakan label pilihan khusus. Gagal memuat registry dapat dicoba ulang dari form. Form dikunci selama penambahan radar agar hasil tidak masuk ke draf peralatan lain.
+
+`schemas[type].fields` merupakan checklist aktif. `schemas[type].legacyFields` menyimpan metadata item yang telah dihapus untuk membaca laporan terdahulu saja. Validasi inspeksi dan alokasi foto baru hanya memakai `fields`. Foto historis tetap membutuhkan otorisasi laporan, nama file yang sesuai, dan parent folder laporan yang benar.
 
 Tidak ada endpoint delete, rename, perubahan sharing, atau akses file arbitrer. Pengujian API dan transaksi ada pada `tests/vercel-api.test.mjs` dan `tests/vercel.test.mjs`.

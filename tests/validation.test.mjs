@@ -28,3 +28,18 @@ test('Radar sections show only the requested fields',()=>{
 test('checked Genset needs its checks and photo; notes only when something is wrong or skipped',()=>{const a=valid('RADAR');a.Genset_Section_Status='Diperiksa';let r=ctx.validate_('RADAR',a,[]);for(const n of ['Genset_Visual_Condition','Genset_Fuel_Level','Genset_Oil_Level','Genset_Image'])assert.ok(r.errors.some(e=>e.field===n),n);assert.ok(!r.errors.some(e=>e.field==='Genset_Notes'));Object.assign(a,{Genset_Visual_Condition:'Baik',Genset_Fuel_Level:'Ada masalah',Genset_Oil_Level:'Baik'});r=ctx.validate_('RADAR',a,['Genset_Image']);assert.ok(r.errors.some(e=>e.field==='Genset_Notes'));a.Genset_Notes='Solar tinggal seperempat';a.Findings_Description='Genset perlu isi bahan bakar';assert.equal(ctx.validate_('RADAR',a,['Genset_Image']).errors.length,0);});
 test('sections without notes or photo fields do not demand them, but problems still need the findings summary',()=>{const a=valid('RADAR');a.Controller_Section_Status='Diperiksa';a.Controller_General_Condition='Ada masalah';a.Controller_Laptop_Condition='Tidak diperiksa';let r=ctx.validate_('RADAR',a,['Controller_Image']);assert.deepEqual(Array.from(r.errors.map(e=>e.field)),['Findings_Description']);a.Findings_Description='Controller bermasalah';assert.equal(ctx.validate_('RADAR',a,['Controller_Image']).errors.length,0);const t=valid('RTS');t.RTS_Network_Section_Status='Diperiksa';t.RTS_Network_Moxa_Indicator='Baik';t.RTS_Network_Cables='Baik';assert.equal(ctx.validate_('RTS',t,[]).errors.length,0);t.RTS_Network_Cables='';assert.deepEqual(Array.from(ctx.validate_('RTS',t,[]).errors.map(e=>e.field)),['RTS_Network_Cables']);});
 test('extra radar options are accepted only for Radar_ID',()=>{const a=valid('RADAR');a.Radar_ID='H-31';assert.ok(ctx.validate_('RADAR',a,[]).errors.some(e=>e.field==='Radar_ID'));assert.equal(ctx.validate_('RADAR',a,[],{Radar_ID:['H-31']}).errors.length,0);a.Radar_Location='';a.General_Section_Status='Diperiksa';a.General_Scanner='Dibuat-buat';assert.ok(ctx.validate_('RADAR',a,[],{Radar_ID:['H-31'],General_Scanner:[]}).errors.some(e=>e.field==='General_Scanner'));});
+test('historical weather readings use the renamed section without restoring form requirements',()=>{
+ const a={...valid('RADAR'),Weather_Temperature_Value:'30',Weather_Notes:'Old sensor reading'};
+ const report=ctx.reportSchema_('RADAR',a);
+ assert.equal(report.fields.find(f=>f.name==='Weather_Temperature_Value').section,'Weather sensor');
+ assert.equal(ctx.validate_('RADAR',a,[]).errors.length,0);
+ assert.equal(Object.hasOwn(ctx.validate_('RADAR',a,[]).answers,'Weather_Temperature_Value'),false);
+});
+test('bulk report export retains removed readings and multiline notes alongside new checklist records',()=>{
+ const records=[{type:'RADAR',answers:{Radar_ID:'H-29',Controller_Alarm:'Ada masalah',Controller_Notes:'first line\r\nsecond line'}},{type:'RADAR',answers:{Radar_ID:'H-31',Controller_General_Condition:'Baik',Controller_Laptop_Condition:'Baik'}}];
+ const text=ctx.csvReports_('RADAR',records);
+ assert.match(text,/Controller_Alarm/);assert.match(text,/"first line\r\nsecond line"/);assert.match(text,/"H-31"/);
+ assert.equal((text.match(/Inspection_DateTime/g)||[]).length,1);
+ assert.throws(()=>ctx.csvReports_('RADAR',[...records,{type:'RTS',answers:{}}]));
+ assert.doesNotMatch(ctx.csvReports_('RADAR',[records[1]]),/Controller_Alarm/);
+});
