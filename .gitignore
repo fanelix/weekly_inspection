@@ -1,0 +1,8 @@
+.clasprc.json
+.clasp.json
+.env*
+node_modules/
+coverage/
+*.zip
+*.log
+preview-images/

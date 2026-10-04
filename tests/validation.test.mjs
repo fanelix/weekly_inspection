@@ -1,0 +1,17 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import vm from 'node:vm';
+const ctx=vm.createContext({console,JSON,Date,Set,Map,Math,Number,String,Object,Array,RegExp});
+for(const file of ['Schema.gs','Validation.gs'])vm.runInContext(readFileSync(new URL('../appsscript/'+file,import.meta.url),'utf8'),ctx);
+const schema=type=>ctx.schema_(type);
+const valid=type=>{const a={Inspection_DateTime:'2026-10-04T11:30',Technician_Name:'Teknisi',Radar_ID:'H-29',Radar_Location:'Area A',RTS_ID:'TM60-01',RTS_Location:'Area B'};for(const f of schema(type).fields.filter(f=>f.name.endsWith('_Section_Status')))a[f.name]='Tidak berlaku (N/A)';return a;};
+test('Radar and RTS require identity and section status',()=>{for(const type of ['RADAR','RTS'])assert.equal(ctx.validate_(type,valid(type),[]).errors.length,0);assert.ok(ctx.validate_('RTS',{},[]).errors.length>5);});
+test('RTS checked instrument requires nivo, cleaning and photograph',()=>{const a=valid('RTS');a.RTS_Instrument_Section_Status='Diperiksa';const result=ctx.validate_('RTS',a,[]);for(const name of ['RTS_Instrument_Nivo','RTS_Instrument_Cleanliness','RTS_Instrument_Image'])assert.ok(result.errors.some(e=>e.field===name));});
+test('Radar checked general requires component answers even with a photo',()=>{const a=valid('RADAR');a.General_Section_Status='Diperiksa';assert.ok(ctx.validate_('RADAR',a,['General_Image']).errors.some(e=>e.field==='General_Scanner'));});
+test('N/A clears hidden stale faults and readings',()=>{const a=valid('RADAR');a.General_Scanner='Ada masalah';a.General_Battery_Voltage='NaN';const r=ctx.validate_('RADAR',a,[]);assert.equal(r.errors.length,0);assert.equal(r.answers.General_Scanner,'');});
+test('not inspected and actual problems require explanation',()=>{const a=valid('RTS');a.RTS_Network_Section_Status='Tidak diperiksa';assert.ok(ctx.validate_('RTS',a,[]).errors.some(e=>e.field==='RTS_Network_Notes'));a.RTS_Network_Notes='Akses panel belum tersedia';assert.equal(ctx.validate_('RTS',a,[]).errors.length,0);});
+test('reject malformed dates, invalid choices and non-finite numeric readings',()=>{const a=valid('RTS');a.Inspection_DateTime='2026-02-30T12:00';a.RTS_Power_Section_Status='Diperiksa';a.RTS_Power_Battery_Voltage='Infinity';const r=ctx.validate_('RTS',a,[]);assert.ok(r.errors.some(e=>e.field==='Inspection_DateTime'));assert.ok(r.errors.some(e=>e.field==='RTS_Power_Battery_Voltage'));a.RTS_Power_Section_Status='fake';assert.ok(ctx.validate_('RTS',a,[]).errors.some(e=>e.field==='RTS_Power_Section_Status'));});
+test('zero reading is valid and requires its display unit',()=>{const a=valid('RADAR');a.Weather_Section_Status='Diperiksa';a.Weather_Rainfall_Value='0';const r=ctx.validate_('RADAR',a,[]);assert.equal(r.answers.Weather_Rainfall_Value,'0');assert.ok(r.errors.some(e=>e.field==='Weather_Rainfall_Unit'));});
+test('CSV contains schema columns and neutralizes formulas',()=>{const csv=ctx.csv_('RTS',{Technician_Name:'=HYPERLINK("bad")',RTS_ID:'01',RTS_Location:'a,b'});assert.match(csv,/"'=HYPERLINK/);assert.match(csv,/"a,b"/);assert.equal(csv.split('\r\n')[0].split(',').length,schema('RTS').fields.length);});
+test('bulk CSV preserves multiline notes and rejects mixed schemas',()=>{const first=ctx.csv_('RTS',{Findings_Description:'line one\r\nline two'}),second=ctx.csv_('RTS',{RTS_ID:'02'});assert.ok(ctx.csvJoin_([first,second]).includes('"line one\r\nline two"'));assert.throws(()=>ctx.csvJoin_([first,ctx.csv_('RADAR',{})]));});

@@ -1,0 +1,51 @@
+<script>
+function activeField_(field,answers) {
+  if(field.type==='Show'||field.name==='Inspection_ID')return false;
+  if(field.when&&answers[field.when.field]!==field.when.value)return false;
+  if(!field.prefix)return true;
+  return field.name.endsWith('_Section_Status')||field.name.endsWith('_Notes')||answers[field.prefix+'_Section_Status']==='Diperiksa';
+}
+function validDate_(value,time) {
+  var pattern=time?/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/:/^(\d{4})-(\d{2})-(\d{2})$/;
+  var m=value.match(pattern);if(!m)return false;
+  var y=Number(m[1]),month=Number(m[2]),day=Number(m[3]),d=new Date(Date.UTC(y,month-1,day));
+  return y>=2000&&y<=2100&&d.getUTCFullYear()===y&&d.getUTCMonth()===month-1&&d.getUTCDate()===day&&(!time||(Number(m[4])<24&&Number(m[5])<60));
+}
+function validate_(type,input,imageNames) {
+  var spec=schema_(type),answers={},errors=[],images=new Set(imageNames),add=function(field,message){errors.push({field:field,message:message});};
+  input=input&&typeof input==='object'&&!Array.isArray(input)?input:{};
+  spec.fields.forEach(function(f){answers[f.name]='';});
+  spec.fields.forEach(function(f){
+    if(!activeField_(f,input)||f.type==='Image')return;
+    var value=typeof input[f.name]==='string'?input[f.name].trim():'';answers[f.name]=value;
+    if(value.length>(f.type==='LongText'?5000:250))add(f.name,'Jawaban terlalu panjang.');
+    if(f.type==='Enum'&&value&&f.options.indexOf(value)<0)add(f.name,'Pilih jawaban yang tersedia.');
+    if(f.type==='Decimal'&&value){var normal=value.replace(',','.');if(!/^[+-]?(?:\d+\.?\d*|\.\d+)$/.test(normal)||!Number.isFinite(Number(normal)))add(f.name,'Masukkan angka yang valid.');else {var n=Number(normal),signed=/Temperature|Tilt_[XY]/.test(f.name);if(!signed&&n<0)add(f.name,'Nilai tidak boleh negatif.');else if(/Humidity/.test(f.name)&&(n<0||n>100))add(f.name,'Humidity harus 0–100%.');else answers[f.name]=String(n);}}
+    if((f.type==='Date'||f.type==='DateTime')&&value&&!validDate_(value,f.type==='DateTime'))add(f.name,'Tanggal/jam tidak valid.');
+    if((f.required==='TRUE'||(f.type==='Enum'&&f.options.indexOf('Baik')>=0))&&!value)add(f.name,'Wajib diisi.');
+  });
+  if(type==='RADAR'&&answers.Radar_ID==='Lainnya'&&!answers.Radar_ID_Other)add('Radar_ID_Other','Isi ID radar lainnya.');
+  var problem=false;
+  spec.fields.filter(function(f){return f.name.endsWith('_Section_Status');}).forEach(function(statusField){
+    var prefix=statusField.prefix,status=answers[statusField.name],checks=spec.fields.filter(function(f){return f.prefix===prefix&&f.type==='Enum'&&f.options.indexOf('Baik')>=0;});
+    var issue=status==='Diperiksa'&&checks.some(function(f){return answers[f.name]==='Ada masalah';});problem=problem||issue;
+    var skipped=status==='Tidak diperiksa'||(status==='Diperiksa'&&checks.some(function(f){return answers[f.name]==='Tidak diperiksa';}));
+    if((issue||skipped)&&!answers[prefix+'_Notes'])add(prefix+'_Notes','Jelaskan temuan atau alasan tidak diperiksa.');
+    if(status==='Diperiksa'&&!images.has(prefix+'_Image'))add(prefix+'_Image','Lampirkan foto bagian yang diperiksa.');
+  });
+  if(problem&&!answers.Findings_Description)add('Findings_Description','Rangkum temuan yang perlu ditindaklanjuti.');
+  var pairs=type==='RADAR'?[['Controller_HDD_Free_Value','Controller_HDD_Free_Unit'],['Solar_Output_Value','Solar_Output_Unit'],['Weather_Rainfall_Value','Weather_Rainfall_Unit'],['Weather_Temperature_Value','Weather_Temperature_Unit'],['Weather_Pressure_Value','Weather_Pressure_Unit'],['Weather_Wind_Speed_Value','Weather_Wind_Speed_Unit']]:[['RTS_Instrument_Tilt_X','RTS_Instrument_Tilt_Unit'],['RTS_Instrument_Tilt_Y','RTS_Instrument_Tilt_Unit']];
+  pairs.forEach(function(pair){if(answers[pair[0]]!==''&&!answers[pair[1]])add(pair[1],'Isi satuan sesuai display.');});
+  return {answers:answers,errors:errors};
+}
+function csv_(type,answers) {
+  function cell(value){var s=String(value===undefined?'':value);if(/^[=+@\-\t\r\n]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';}
+  var fields=schema_(type).fields;return fields.map(function(f){return f.name;}).join(',')+'\r\n'+fields.map(function(f){return cell(answers[f.name]);}).join(',')+'\r\n';
+}
+function csvJoin_(parts) {
+  if(!parts.length)return '';
+  var header=parts[0].slice(0,parts[0].indexOf('\r\n'));
+  return header+'\r\n'+parts.map(function(part){var boundary=part.indexOf('\r\n');if(boundary<0||part.slice(0,boundary)!==header)throw new Error('Kolom CSV harus sama.');return part.slice(boundary+2);}).join('');
+}
+
+</script>

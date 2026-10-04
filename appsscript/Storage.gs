@@ -1,0 +1,27 @@
+function typeFolder_(type){schema_(type);return DriveApp.getFolderById(config_().folderIds[type]);}
+function reportFolder_(type,id,create){if(typeof id!=='string'||!/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(id))throw new Error('ID inspeksi tidak valid.');var parent=typeFolder_(type),found=parent.getFoldersByName(id);return found.hasNext()?found.next():create?parent.createFolder(id):null;}
+function fileNamed_(folder,name){var files=folder.getFilesByName(name);return files.hasNext()?files.next():null;}
+function readRecord_(folder){var file=folder&&fileNamed_(folder,'inspection.json');if(!file)return null;var record=JSON.parse(file.getBlob().getDataAsString('UTF-8'));if(record.schemaVersion!==1||!record.answers||!record.photos||record.id!==folder.getName())throw new Error('Format laporan tidak dikenali.');return record;}
+function photoBytes_(photo){if(!photo||typeof photo.data!=='string'||!/^[A-Za-z0-9+/]*={0,2}$/.test(photo.data)||photo.data.length>Math.ceil(config_().maxPhotoBytes/3)*4+4)throw new Error('Foto tidak valid atau melebihi 1 MB.');var bytes=Utilities.base64Decode(photo.data),b=bytes.map(function(v){return (v+256)%256;}),jpeg=b[0]===255&&b[1]===216&&b[2]===255,png=b[0]===137&&b[1]===80&&b[2]===78&&b[3]===71&&b[4]===13&&b[5]===10&&b[6]===26&&b[7]===10,webp=b[0]===82&&b[1]===73&&b[2]===70&&b[3]===70&&b[8]===87&&b[9]===69&&b[10]===66&&b[11]===80;
+  var type=jpeg?'image/jpeg':png?'image/png':webp?'image/webp':'';if(!type||photo.type!==type||bytes.length>config_().maxPhotoBytes)throw new Error('Gunakan foto JPEG, PNG, atau WebP maksimal 1 MB.');return {bytes:bytes,type:type,ext:jpeg?'jpg':png?'png':'webp'};
+}
+function saveRecord_(request,validated,prepared){
+ var lock=LockService.getScriptLock();lock.waitLock(30000);
+ try{
+  var folder=reportFolder_(request.type,request.id,true),existing=readRecord_(folder),receiptHash=hash_(request.receiptKey);
+  var fingerprint=hash_(JSON.stringify({type:request.type,answers:validated.answers,photos:prepared.map(function(p){return {field:p.field,digest:hash_(p.bytes)};}).sort(function(a,b){return a.field.localeCompare(b.field);})}));
+  if(existing){if(!equal_(existing.receiptHash,receiptHash)||!equal_(existing.fingerprint,fingerprint))throw new Error('ID pengiriman sudah digunakan dengan isi berbeda. Buat inspeksi baru.');return {ok:true,id:existing.id,type:existing.type,duplicate:true,savedAt:existing.savedAt};}
+  // Record an immutable intent before files so interrupted retries cannot change the payload.
+  var intent=fileNamed_(folder,'pending.json');if(intent){var pending=JSON.parse(intent.getBlob().getDataAsString());if(!equal_(pending.fingerprint,fingerprint)||!equal_(pending.receiptHash,receiptHash))throw new Error('Isi pengiriman berubah setelah proses dimulai. Gunakan ID baru.');}else folder.createFile(Utilities.newBlob(JSON.stringify({fingerprint:fingerprint,receiptHash:receiptHash}),'application/json','pending.json'));
+  var answers=validated.answers,photos={};answers.Inspection_ID=request.id;
+  prepared.forEach(function(p){var name=p.field+'.'+p.ext,file=fileNamed_(folder,name);if(!file)file=folder.createFile(Utilities.newBlob(p.bytes,p.type,name));photos[p.field]={id:file.getId(),name:name,type:p.type,size:p.bytes.length};answers[p.field]=request.type+'/'+request.id+'/'+name;});
+  var csv=csv_(request.type,answers),csvFile=fileNamed_(folder,'inspection.csv');if(csvFile)csvFile.setContent('\uFEFF'+csv);else folder.createFile(Utilities.newBlob('\uFEFF'+csv,'text/csv','inspection.csv'));
+  var record={schemaVersion:1,id:request.id,type:request.type,model:schema_(request.type).model,answers:answers,photos:photos,savedAt:new Date().toISOString(),receiptHash:receiptHash,fingerprint:fingerprint};
+  // JSON is the commit marker. History ignores folders without it.
+  folder.createFile(Utilities.newBlob(JSON.stringify(record,null,2),'application/json','inspection.json'));
+  return {ok:true,id:record.id,type:record.type,savedAt:record.savedAt};
+ }finally{lock.releaseLock();}
+}
+function authorizedRecord_(request){var folder=reportFolder_(request.type,request.id,false),record=readRecord_(folder);if(!record)throw new Error('Laporan tidak ditemukan.');if(request.token)admin_(request.token);else if(typeof request.key!=='string'||!equal_(record.receiptHash,hash_(request.key)))throw new Error('Kunci laporan tidak sesuai.');return record;}
+function publicRecord_(record){return {id:record.id,type:record.type,model:record.model,answers:record.answers,photos:Object.keys(record.photos).map(function(field){return {field:field,name:record.photos[field].name,type:record.photos[field].type};}),savedAt:record.savedAt};}
+function summary_(record){var a=record.answers,enums=schema_(record.type).fields.filter(function(f){return f.type==='Enum'&&(f.options.indexOf('Baik')>=0||f.name.endsWith('_Section_Status'));}),bad=enums.some(function(f){return a[f.name]==='Ada masalah';}),skipped=enums.some(function(f){return a[f.name]==='Tidak diperiksa';});return {id:record.id,type:record.type,unit:record.type==='RADAR'?(a.Radar_ID==='Lainnya'?a.Radar_ID_Other:a.Radar_ID):a.RTS_ID,location:a.Radar_Location||a.RTS_Location,name:a.Technician_Name,date:a.Inspection_DateTime,status:bad?'Ada masalah':skipped?'Belum lengkap':'Tidak ada masalah dilaporkan',savedAt:record.savedAt};}
