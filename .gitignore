@@ -6,3 +6,6 @@ coverage/
 *.zip
 *.log
 preview-images/
+public/
+.vercel/
+!.env.example

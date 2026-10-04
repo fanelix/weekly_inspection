@@ -1,98 +1,85 @@
-# Weekly Inspection — Radar & RTS Leica TM60
+# BSI · Weekly Inspection — Radar & RTS Leica TM60
 
-Aplikasi inspeksi mingguan untuk field technician BSI: frontend responsif di HP, backend Google Apps Script, dan penyimpanan utama di Google Drive. Tidak ada kolom email dan teknisi tidak perlu memberikan akses Google Drive pribadinya.
+Aplikasi inspeksi mingguan untuk field technician BSI, dengan tema navy/green BSI, mode terang/gelap, frontend responsif, backend Node.js di **Vercel**, dan penyimpanan utama **Google Drive**. Tidak ada kolom email dan teknisi tidak perlu memberi akses Google Drive pribadinya.
 
-**Status:** kode aplikasi tersedia. Web app produksi baru aktif setelah pemilik mengotorisasi dan men-deploy Google Apps Script. GitHub menyimpan kode; GitHub Pages tidak menjalankan backend ini. Preview lokal memakai Drive simulasi di memori, tidak mengirim data ke Google.
+Versi 2 berjalan tanpa Google Apps Script. [Panduan deployment Vercel](docs/vercel-deployment.md) menjelaskan import GitHub dan OAuth akun pemilik. Backend baru memerlukan environment variables pemilik; koneksi Drive melalui ChatGPT tidak otomatis menjadi kredensial Vercel. Tanpa konfigurasi, aplikasi menampilkan keterangan Drive belum terhubung dan menolak pengiriman.
 
 ## Fitur
 
-- Radar: General, Genset, Controller/komunikasi, Solar, Weather, Trailer/container, dan temuan; mengikuti checklist SV-2248 April 2026.
-- RTS Leica TM60: nivo/level, kebersihan lensa/bodi, dudukan alat, panel/kelistrikan, Moxa/jaringan, solar, baterai/charge controller, serta dudukan/area.
-- Foto melalui kamera atau galeri untuk setiap bagian yang diperiksa; kompresi otomatis, maksimum 1 MB/foto dan 8 MB total.
-- Status Diperiksa / Tidak diperiksa / N/A; catatan wajib untuk masalah atau item yang tidak diperiksa. Kondisi tidak dipilih otomatis.
-- Pembacaan aktual opsional; nilai kosong tidak menjadi nol. Satuan sesuai display, tanpa ambang alarm yang diinventarisasi.
-- UUID dan commit marker mencegah laporan ganda saat mencoba ulang; proses belum lengkap tidak masuk riwayat.
-- Draft jawaban pada tab browser; foto yang belum terkirim harus dilampirkan ulang setelah reload.
-- Bukti pengiriman, CSV, ZIP beserta foto, laporan terstruktur, serta cetak / Save as PDF.
-- Riwayat admin dengan filter peralatan, unit, kondisi, dan rentang tanggal; pagination dan ekspor data yang telah dimuat.
-- Password admin, sesi 1 jam, PIN teknisi opsional; tanpa secret di frontend atau GitHub.
+- Radar: General, Genset, Controller/komunikasi, Solar, Weather, Trailer/container, dan temuan; checklist SV-2248 April 2026.
+- Leica TM60: nivo/level, lensa/bodi, dudukan, panel/kelistrikan, Moxa/jaringan, solar, baterai/charge controller, serta area alat.
+- Kamera atau galeri per bagian; kompresi otomatis, maksimum 1 MB/foto dan 8 MB total. Foto dikirim satu per request.
+- Diperiksa / Tidak diperiksa / N/A; kondisi tidak dipilih otomatis. Catatan wajib untuk masalah dan item yang tidak diperiksa.
+- Pembacaan aktual opsional dengan satuan sesuai display. Nilai kosong tidak menjadi nol; aplikasi tidak menginventarisasi ambang alarm alat.
+- ID Drive dialokasikan sebelum menulis dan disimpan dalam draf. Percobaan ulang memakai ID tetap; laporan belum lengkap tidak masuk riwayat.
+- Draf jawaban dalam tab browser; foto yang belum terkirim perlu dilampirkan ulang setelah reload. Bila draf gagal disimpan, pengiriman belum dimulai.
+- Bukti pengiriman, CSV, ZIP beserta foto, laporan terstruktur, dan cetak / Save as PDF.
+- Riwayat admin dengan filter peralatan, unit, kondisi, tanggal, pagination, dan ekspor data yang sudah dimuat.
+- Password admin dengan cookie HttpOnly satu jam, PIN teknisi opsional, secret hanya di server.
+- Laporan UUID dari Apps Script tetap dapat dibaca.
 
-## Penyimpanan Drive
+## Penyimpanan
 
 Folder utama: [Weekly Inspection](https://drive.google.com/drive/folders/1JoaN3UkwcEGNGo0awHsOdQgkWfvLi6hJ).
-
-Folder aktif sudah dibuat dan diuji tulis:
 
 | Jenis | Folder |
 | --- | --- |
 | Radar | [Radar](https://drive.google.com/drive/folders/1Hy712mdHN7nc9vl0qlvp7767mZ94mzkj) |
 | RTS | [RTS](https://drive.google.com/drive/folders/1doqkhGxYICXQJeRpLmtyc1mZl5olgMzt) |
 
-```text
-Weekly Inspection/
-  Radar/<uuid>/
-    pending.json
-    General_Image.jpg
-    ...
-    inspection.csv
-    inspection.json
-  RTS/<uuid>/
-    pending.json
-    RTS_Instrument_Image.jpg
-    ...
-    inspection.csv
-    inspection.json
+Setiap laporan mempunyai folder ber-ID Drive, `pending.json`, foto per bagian, `inspection.csv`, dan `inspection.json`. Manifest `inspection.json` dibuat paling akhir sebagai penanda pengiriman lengkap. ID file tetap dan verifikasi isi melindungi retry konkuren dari duplikasi. Tiket mengikat jawaban, metadata foto, dan folder tujuan; foto baru menyimpan SHA-256 untuk pemeriksaan saat dibaca.
+
+File internal jangan diedit. Pemilik/editor Drive tetap dapat mengubah atau menghapus data secara langsung; penyimpanan ini bukan arsip tahan perubahan. Folder pada pemeriksaan awal memiliki **Anyone with link — Editor**. Password admin aplikasi tidak mengurangi akses langsung Drive. Aplikasi tidak mengubah sharing atau file spreadsheet/Form/Apps Script yang sudah ada.
+
+## Menjalankan dan deploy
+
+Gunakan [panduan Vercel](docs/vercel-deployment.md) untuk bekerja sepenuhnya melalui browser. Import repository dengan preset **Other**; konfigurasi build sudah tersedia di `vercel.json`.
+
+Pengembangan lokal, Node.js 24, tanpa dependency runtime pihak ketiga:
+
+```sh
+npm run build
+npm run dev
 ```
 
-`inspection.json` dibuat paling akhir dan menandai laporan lengkap. `pending.json` menyimpan digest transaksi untuk retry; jangan mengedit file internal ini. Tidak ada database lokal wajib, service account, atau server Node yang harus di-host. Tidak mengubah spreadsheet/Form/Apps Script lama di folder tersebut.
+Buka `http://localhost:4173`. Untuk koneksi nyata, isi `.env.local` berdasarkan `.env.example`; jangan commit secret. Tanpa env, tidak ada Drive simulasi pada aplikasi Vercel.
 
-**Akses folder saat pemeriksaan:** Anyone with link — Editor. Foto dan laporan di bawah folder akan mengikuti akses Drive tersebut. Password admin aplikasi hanya membatasi menu aplikasi, bukan akses langsung yang telah diberikan oleh Drive. Atur sharing folder melalui pemilik Drive bila akses tersebut ingin dibatasi; aplikasi tidak mengubah sharing.
-
-## Menjalankan tanpa terminal
-
-Ikuti [panduan deployment](docs/deployment.md). Paket siap salin di `dist/` hanya terdiri dari tiga file:
-
-1. `Code.gs` — seluruh backend.
-2. `Index.html` — seluruh frontend dan validasi client.
-3. `appsscript.json` — manifest.
-
-Tidak perlu API key, OAuth client secret, npm install, atau token GitHub untuk memakai aplikasi. Akun pemilik tetap harus memberikan izin Google saat mengaktifkan Apps Script. Jika kebijakan Google Workspace tidak menyediakan akses anonymous, teknisi mungkin tetap perlu login sesuai kebijakan domain; aplikasi sendiri tidak meminta email.
-
-## Pengembangan
-
-Node 22+; CI memakai Node 24. Tidak ada dependency npm pihak ketiga.
-
-```bash
+```sh
 npm run check
 npm test
-npm run preview
+npm run build
 ```
 
-Preview lokal di port 4173, dengan password admin **khusus preview** `preview-admin-only`. Password ini hanya ada dalam adapter pengujian dan tidak menjadi password aplikasi Google Apps Script.
+## Struktur kode
 
-Setelah mengubah validasi:
+| Lokasi | Fungsi |
+| --- | --- |
+| `web/` | Frontend tema BSI, form, draf, upload bertahap, ekspor, admin |
+| `api/rpc.js` | Entry point fungsi Vercel |
+| `server/` | Autentikasi, transaksi, Drive REST, konfigurasi |
+| `appsscript/Schema.gs`, `Validation.gs` | Sumber checklist dan validasi bersama |
+| `server/domain.js` | Generated domain; `npm run sync-domain` setelah mengubah schema/validasi |
+| `public/` | Output build, tidak diedit atau di-commit |
+| `tests/` | Validasi, transaksi, RPC, autentikasi, transport dan draf |
 
-```bash
-npm run sync-rules
-npm run check
-npm test
-npm run bundle
-```
-
-Backend dalam `appsscript/`: `Schema.gs`, `Validation.gs`, `Config.gs`, `Auth.gs`, `Storage.gs`, `Code.gs`. Frontend: `Index.html`, `Styles.html`, `Client.html`, `Rules.html`, `Zip.html`. File `dist/` dihasilkan otomatis; jangan mengedit bundle langsung.
+Setelah mengubah schema/validasi, jalankan `npm run sync-rules`, `npm run sync-domain`, `npm run bundle`, lalu checks/tests/build. CI memeriksa kecocokan kode generated.
 
 ## Uji dan batas operasional
 
-Suite memeriksa validasi Radar/RTS, N/A, foto, nilai nol/satuan, tanggal, formula/multiline CSV, retry, transaksi parsial, akses laporan sendiri, admin, dan PIN. Drive dalam tes disimulasikan; uji ini tidak menggantikan smoke test deployment Google nyata. Gunakan checklist deployment sebelum membagikan URL kepada teknisi.
+Tes menggunakan adapter Drive memori dan HTTP lokal; tidak membuktikan OAuth atau upload produksi sudah aktif. Lakukan uji Radar dan RTS melalui deployment sesuai panduan sebelum digunakan tim.
 
-Apps Script dan Drive memiliki kuota akun. Foto dikirim setelah kompresi dan riwayat dibaca bertahap. Urutan tanggal terbaru berlaku pada halaman/data yang sudah dimuat; gunakan filter tanggal dan muat halaman berikutnya untuk data lama. Sesi cache dapat hilang lebih awal; login ulang atau kirim ulang dengan UUID yang sama. Paket ZIP dihasilkan pada perangkat pengisi.
+Tiket upload berlaku 24 jam. Jawaban/foto tidak dapat diganti setelah transaksi dimulai; buat inspeksi baru bila berubah. Riwayat membaca halaman Drive bertahap; urutan tanggal terbaru berlaku pada data yang sudah dimuat. Tidak ada endpoint hapus laporan. Batas login per-instance bersifat best effort; gunakan konfigurasi Firewall Vercel bila membutuhkan pembatasan lintas-instance.
 
-Form tidak mengubah leveling, resection, kalibrasi, firmware, atau konfigurasi monitoring. Temuan keselamatan dan tindakan pada alat tetap mengikuti prosedur site.
+Form mencatat pemeriksaan, tanpa mengubah leveling, resection, kalibrasi, firmware, atau monitoring alat. Tindakan teknisi mengikuti prosedur site.
+
+## Apps Script lama
+
+Backend/frontend lama tetap ada di `appsscript/` dan paket tiga file di `dist/`, dengan [panduan Apps Script](docs/deployment.md). Versi lama tidak diperlukan untuk deployment Vercel. `npm run preview` menjalankan preview Apps Script dengan Drive simulasi dan password khusus preview `preview-admin-only`; gunakan `npm run dev` untuk aplikasi Vercel.
 
 ## Referensi
 
-- [Google Apps Script Web Apps](https://developers.google.com/apps-script/guides/web)
-- [HTML Service dan RPC privat](https://developers.google.com/apps-script/guides/html/communication)
-- [Drive service](https://developers.google.com/apps-script/reference/drive)
+- [Tema BSI dari pengguna](https://claude.ai/artifact/13eT27KS9MeTnWVxQAwoBW)
+- [Vercel deployment](https://vercel.com/docs/git)
+- [Google Drive API](https://developers.google.com/workspace/drive/api/guides/create-file)
 - [Leica Nova TM60](https://leica-geosystems.com/products/total-stations/robotic-total-stations/leica-nova-tm60)
-- Checklist Radar: SV-2248 Report Maintenance BSI April 2026, diberikan oleh pengguna. Temuan maintenance historis tidak menjadi kondisi saat ini yang diisi otomatis.
+- Checklist Radar: SV-2248 Report Maintenance BSI April 2026, diberikan pengguna. Temuan historis tidak menjadi kondisi alat saat ini secara otomatis.

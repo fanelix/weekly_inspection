@@ -1,15 +1,20 @@
 {
   "name": "weekly-inspection-bsi",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "description": "Radar and Leica TM60 weekly inspections backed by Google Drive",
   "type": "module",
-  "engines": {"node": ">=22"},
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "test": "node --test tests/*.test.mjs",
     "check": "node scripts/check.mjs",
     "sync-rules": "node scripts/sync-rules.mjs",
     "preview": "node scripts/preview.mjs",
-    "bundle": "node scripts/bundle.mjs"
+    "bundle": "node scripts/bundle.mjs",
+    "build": "node scripts/build-vercel.mjs",
+    "sync-domain": "node scripts/sync-domain.mjs",
+    "dev": "node scripts/dev-vercel.mjs"
   }
 }

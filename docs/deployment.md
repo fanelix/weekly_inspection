@@ -1,5 +1,7 @@
 # Aktivasi web app melalui browser
 
+> Panduan ini untuk versi Apps Script lama. Untuk versi 2 yang di-host di Vercel, gunakan [panduan Vercel](vercel-deployment.md).
+
 ## 1. Buat project Google Apps Script baru
 
 Masuk ke [Google Apps Script](https://script.google.com/) dengan akun yang memiliki akses tulis ke folder Weekly Inspection. Buat project baru bernama **BSI Weekly Inspection — Radar & RTS**. Gunakan project baru agar Apps Script/Form yang sudah ada tidak tertimpa.

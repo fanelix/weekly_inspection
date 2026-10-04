@@ -1,0 +1,5 @@
+'use strict';
+try{document.documentElement.dataset.theme=localStorage.getItem('wi_theme')==='dark'?'dark':'light';}catch{}
+function wiSyncStatus(text,status){const chip=document.querySelector('#sync-status');if(chip){chip.textContent=text;chip.dataset.status=status||'online';}}
+function networkStatus(){if(!navigator.onLine)wiSyncStatus('Offline · jawaban di tab','offline');else wiSyncStatus('Terhubung','online');}
+const themeButton=document.querySelector('#theme-toggle');function themeLabel(){const dark=document.documentElement.dataset.theme==='dark';themeButton.textContent=dark?'Mode terang':'Mode gelap';themeButton.setAttribute('aria-label',dark?'Ganti ke mode terang':'Ganti ke mode gelap');}themeButton.onclick=()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('wi_theme',document.documentElement.dataset.theme);}catch{}themeLabel();};themeLabel();window.addEventListener('online',networkStatus);window.addEventListener('offline',networkStatus);networkStatus();
