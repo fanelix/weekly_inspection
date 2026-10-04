@@ -15,6 +15,8 @@ export function createRpcHandler({config=loadConfig(),drive=new GoogleDrive(conf
     case 'loginAdmin':{verifyToken(config,p.ticket,'bootstrap');if(config.adminPassword.length<12)throw Error('Password admin belum dikonfigurasi di Vercel.');const ip=String(req.headers['x-vercel-forwarded-for']||req.headers['x-forwarded-for']||req.socket?.remoteAddress||'unknown').slice(0,100),now=Date.now(),f=failures.get(ip);if(f&&f.until>now&&f.count>=10)throw Error('Terlalu banyak percobaan. Coba kembali dalam 10 menit.');if(!passwordMatches(config.adminPassword,p.password,config.secret)){failures.set(ip,{count:f&&f.until>now?f.count+1:1,until:now+600000});if(failures.size>2000)failures.clear();throw Error('Password admin tidak sesuai.');}failures.delete(ip);res.setHeader('Set-Cookie',sessionCookie(config,signToken(config,'admin',{version:hash(config.adminPassword)},3600)));result={ok:true,token:'cookie'};break;}
     case 'logoutAdmin':adminSession(config,req);res.setHeader('Set-Cookie',sessionCookie(config,'',0));result={ok:true};break;
     case 'allocateInspection':requireStorage(config);verifyToken(config,p.ticket,'bootstrap');requireTechnician(config,p.pin);result=await service.allocate(p);break;
+    case 'listRadars':requireStorage(config);verifyToken(config,p.ticket,'bootstrap');result=await service.radars();break;
+    case 'addRadar':requireStorage(config);verifyToken(config,p.ticket,'bootstrap');requireTechnician(config,p.pin);result=await service.addRadar(p);break;
     case 'beginInspection':requireStorage(config);result=await service.begin(p);break;
     case 'uploadInspectionPhoto':requireStorage(config);result=await service.photo(p);break;
     case 'commitInspection':requireStorage(config);result=await service.commit(p);break;

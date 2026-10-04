@@ -7,6 +7,8 @@
 | Method | Otorisasi dan kegunaan |
 | --- | --- |
 | `getBootstrap` | Schema/configuration flags tanpa secret |
+| `listRadars` | Tiket bootstrap; daftar radar tambahan dari folder Radar (`radar-registry-<ID>.json`) |
+| `addRadar` | Tiket bootstrap + PIN opsional; ID dinormalisasi (kapital, 2–24 karakter), duplikat memilih entri yang ada, maksimal 100 radar tambahan |
 | `allocateInspection` | Tiket bootstrap + PIN opsional; validasi jawaban dan metadata foto, alokasi ID Drive, belum menulis file |
 | `beginInspection` | Tiket upload; verifikasi jawaban sama, buat folder dan pending dengan ID tetap |
 | `uploadInspectionPhoto` | Tiket upload; satu foto base64, signature/type/size/SHA-256 cocok alokasi |
@@ -19,5 +21,7 @@
 | `checkStorage` | Cookie admin; akses OAuth aktual serta metadata folder root/Radar/RTS |
 
 Tiket bootstrap berlaku 15 menit, upload 24 jam, cookie admin 1 jam. Nama helper server bukan method publik. Retry memakai upload ticket dan ID yang sama; pengubahan isi membutuhkan inspeksi baru. Laporan Apps Script lama menggunakan UUID dan tetap dapat ditemukan berdasarkan nama folder.
+
+Radar tambahan hanya menambah file kecil `radar-registry-<ID>.json` di folder Radar; file itu bukan folder laporan sehingga tidak muncul di riwayat. ID radar yang tidak ada di daftar bawaan divalidasi terhadap registry saat `allocateInspection` dan `beginInspection`.
 
 Tidak ada endpoint delete, rename, perubahan sharing, atau akses file arbitrer. Pengujian API dan transaksi ada pada `tests/vercel-api.test.mjs` dan `tests/vercel.test.mjs`.

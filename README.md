@@ -6,8 +6,10 @@ Versi 2 berjalan tanpa Google Apps Script. [Panduan deployment Vercel](docs/verc
 
 ## Fitur
 
-- Radar: General, Genset, Controller/komunikasi, Solar, Weather, Trailer/container, dan temuan; checklist SV-2248 April 2026.
-- Leica TM60: nivo/level, lensa/bodi, dudukan, panel/kelistrikan, Moxa/jaringan, solar, baterai/charge controller, serta area alat.
+- Radar: General, Genset, Controller, Solar, Weather sensor, Trailer/container, dan temuan; checklist SV-2248 April 2026 yang disederhanakan. Genset: kondisi visual, fuel/oil level, nomor, tegangan baterai, catatan, foto. Controller: kondisi umum dan laptop, foto. Solar: kebersihan, kabel, mounting, foto. Weather sensor: kondisi umum, foto.
+- Radar baru yang belum ada di daftar dapat ditambahkan langsung dari form (Identitas → "Tambahkan radar baru"). Daftar tersimpan di Drive pada folder Radar sebagai `radar-registry-<ID>.json`, sehingga langsung tersedia untuk semua teknisi.
+- Header menampilkan logo PT Bumi Suksesindo dari `web/assets/bsi-logo.svg` atau `bsi-logo.png` (lihat `web/assets/README.md`).
+- Leica TM60: nivo/level, lensa/bodi, dudukan, panel/kelistrikan, Moxa/jaringan (indikator Moxa dan kondisi kabel), solar, baterai/charge controller, serta area alat.
 - Kamera atau galeri per bagian; kompresi otomatis, maksimum 1 MB/foto dan 8 MB total. Foto dikirim satu per request.
 - Diperiksa / Tidak diperiksa / N/A; kondisi tidak dipilih otomatis. Catatan wajib untuk masalah dan item yang tidak diperiksa.
 - Pembacaan aktual opsional dengan satuan sesuai display. Nilai kosong tidak menjadi nol; aplikasi tidak menginventarisasi ambang alarm alat.
