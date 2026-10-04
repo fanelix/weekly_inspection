@@ -320,8 +320,25 @@ var WI_SCHEMAS_ = {
         "help": ""
       },
       {
+        "name": "Genset_Visual_Condition",
+        "label": "Kondisi genset secara visual",
+        "section": "Genset",
+        "type": "Enum",
+        "options": [
+          "Baik",
+          "Ada masalah",
+          "Tidak diperiksa",
+          "Tidak berlaku (N/A)"
+        ],
+        "required": "[Genset_Section_Status] = \"Diperiksa\"",
+        "show": "[Genset_Section_Status] = \"Diperiksa\"",
+        "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
+        "prefix": "Genset",
+        "help": ""
+      },
+      {
         "name": "Genset_Fuel_Level",
-        "label": "Ketersediaan bahan bakar",
+        "label": "Fuel level genset",
         "section": "Genset",
         "type": "Enum",
         "options": [
@@ -338,7 +355,7 @@ var WI_SCHEMAS_ = {
       },
       {
         "name": "Genset_Oil_Level",
-        "label": "Level oli",
+        "label": "Oil level genset",
         "section": "Genset",
         "type": "Enum",
         "options": [
@@ -354,168 +371,20 @@ var WI_SCHEMAS_ = {
         "help": ""
       },
       {
-        "name": "Genset_Fuel_Leak",
-        "label": "Kondisi terkait kebocoran bahan bakar",
-        "section": "Genset",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "[Genset_Section_Status] = \"Diperiksa\"",
-        "show": "[Genset_Section_Status] = \"Diperiksa\"",
-        "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
-        "prefix": "Genset",
-        "help": ""
-      },
-      {
-        "name": "Genset_Oil_Leak",
-        "label": "Kondisi terkait kebocoran oli",
-        "section": "Genset",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "[Genset_Section_Status] = \"Diperiksa\"",
-        "show": "[Genset_Section_Status] = \"Diperiksa\"",
-        "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
-        "prefix": "Genset",
-        "help": ""
-      },
-      {
-        "name": "Genset_Air_Filter",
-        "label": "Kondisi filter udara",
-        "section": "Genset",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "[Genset_Section_Status] = \"Diperiksa\"",
-        "show": "[Genset_Section_Status] = \"Diperiksa\"",
-        "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
-        "prefix": "Genset",
-        "help": ""
-      },
-      {
-        "name": "Genset_Oil_Filter",
-        "label": "Kondisi filter oli",
-        "section": "Genset",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "[Genset_Section_Status] = \"Diperiksa\"",
-        "show": "[Genset_Section_Status] = \"Diperiksa\"",
-        "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
-        "prefix": "Genset",
-        "help": ""
-      },
-      {
-        "name": "Genset_Fuel_Filter",
-        "label": "Kondisi filter bahan bakar",
-        "section": "Genset",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "[Genset_Section_Status] = \"Diperiksa\"",
-        "show": "[Genset_Section_Status] = \"Diperiksa\"",
-        "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
-        "prefix": "Genset",
-        "help": ""
-      },
-      {
-        "name": "Genset_Battery_Terminals",
-        "label": "Terminal baterai starter",
-        "section": "Genset",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "[Genset_Section_Status] = \"Diperiksa\"",
-        "show": "[Genset_Section_Status] = \"Diperiksa\"",
-        "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
-        "prefix": "Genset",
-        "help": ""
-      },
-      {
-        "name": "Genset_Charging",
-        "label": "Charging baterai starter",
-        "section": "Genset",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "[Genset_Section_Status] = \"Diperiksa\"",
-        "show": "[Genset_Section_Status] = \"Diperiksa\"",
-        "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
-        "prefix": "Genset",
-        "help": ""
-      },
-      {
-        "name": "Genset_Alarm",
-        "label": "Kondisi alarm genset",
-        "section": "Genset",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "[Genset_Section_Status] = \"Diperiksa\"",
-        "show": "[Genset_Section_Status] = \"Diperiksa\"",
-        "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
-        "prefix": "Genset",
-        "help": ""
-      },
-      {
-        "name": "Genset_Serial_Number",
-        "label": "Nomor seri genset",
+        "name": "Genset_Number",
+        "label": "Nomor genset",
         "section": "Genset",
         "type": "Text",
         "options": [],
         "required": "FALSE",
         "show": "[Genset_Section_Status] = \"Diperiksa\"",
-        "description": "Nomor yang dibaca pada unit.",
+        "description": "Nomor genset yang dibaca pada unit.",
         "prefix": "Genset",
         "help": ""
       },
       {
-        "name": "Genset_Run_Hours",
-        "label": "Running hours genset (jam)",
-        "section": "Genset",
-        "type": "Decimal",
-        "options": [],
-        "required": "FALSE",
-        "show": "[Genset_Section_Status] = \"Diperiksa\"",
-        "description": "Angka total hour meter; tidak melakukan reset.",
-        "prefix": "Genset",
-        "help": "Isi pembacaan aktual; kosongkan jika tidak tersedia."
-      },
-      {
         "name": "Genset_Starter_Battery_Voltage_V",
-        "label": "Tegangan baterai starter (V)",
+        "label": "Tegangan baterai genset (V)",
         "section": "Genset",
         "type": "Decimal",
         "options": [],
@@ -527,11 +396,11 @@ var WI_SCHEMAS_ = {
       },
       {
         "name": "Genset_Notes",
-        "label": "Catatan Genset",
+        "label": "Catatan genset",
         "section": "Genset",
         "type": "LongText",
         "options": [],
-        "required": "OR([Genset_Section_Status] = \"Tidak diperiksa\", AND([Genset_Section_Status] = \"Diperiksa\", OR(IN([Genset_Fuel_Level], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Genset_Oil_Level], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Genset_Fuel_Leak], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Genset_Oil_Leak], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Genset_Air_Filter], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Genset_Oil_Filter], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Genset_Fuel_Filter], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Genset_Battery_Terminals], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Genset_Charging], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Genset_Alarm], LIST(\"Ada masalah\", \"Tidak diperiksa\")))))",
+        "required": "OR([Genset_Section_Status] = \"Tidak diperiksa\", AND([Genset_Section_Status] = \"Diperiksa\", OR(IN([Genset_Visual_Condition], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Genset_Fuel_Level], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Genset_Oil_Level], LIST(\"Ada masalah\", \"Tidak diperiksa\")))))",
         "show": "TRUE",
         "description": "Jelaskan temuan atau alasan bagian/item tidak diperiksa. Bagian N/A tidak wajib foto.",
         "prefix": "Genset",
@@ -539,7 +408,7 @@ var WI_SCHEMAS_ = {
       },
       {
         "name": "Genset_Image",
-        "label": "Foto Genset",
+        "label": "Foto genset",
         "section": "Genset",
         "type": "Image",
         "options": [],
@@ -578,8 +447,8 @@ var WI_SCHEMAS_ = {
         "help": ""
       },
       {
-        "name": "Controller_Module",
-        "label": "Kondisi modul controller",
+        "name": "Controller_General_Condition",
+        "label": "Kondisi umum",
         "section": "Modul controller & komunikasi",
         "type": "Enum",
         "options": [
@@ -595,8 +464,8 @@ var WI_SCHEMAS_ = {
         "help": ""
       },
       {
-        "name": "Controller_Cables_Connectors",
-        "label": "Kabel dan konektor controller",
+        "name": "Controller_Laptop_Condition",
+        "label": "Kondisi laptop",
         "section": "Modul controller & komunikasi",
         "type": "Enum",
         "options": [
@@ -610,143 +479,6 @@ var WI_SCHEMAS_ = {
         "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
         "prefix": "Controller",
         "help": ""
-      },
-      {
-        "name": "Controller_Alarm",
-        "label": "Kondisi alarm controller",
-        "section": "Modul controller & komunikasi",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "[Controller_Section_Status] = \"Diperiksa\"",
-        "show": "[Controller_Section_Status] = \"Diperiksa\"",
-        "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
-        "prefix": "Controller",
-        "help": ""
-      },
-      {
-        "name": "Controller_Camera_Transfer",
-        "label": "Transfer gambar kamera",
-        "section": "Modul controller & komunikasi",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "[Controller_Section_Status] = \"Diperiksa\"",
-        "show": "[Controller_Section_Status] = \"Diperiksa\"",
-        "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
-        "prefix": "Controller",
-        "help": ""
-      },
-      {
-        "name": "Controller_WNC_RDP",
-        "label": "Koneksi WNC / RDP",
-        "section": "Modul controller & komunikasi",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "[Controller_Section_Status] = \"Diperiksa\"",
-        "show": "[Controller_Section_Status] = \"Diperiksa\"",
-        "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
-        "prefix": "Controller",
-        "help": ""
-      },
-      {
-        "name": "Controller_PSV_Transmission",
-        "label": "Transmisi PSV",
-        "section": "Modul controller & komunikasi",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "[Controller_Section_Status] = \"Diperiksa\"",
-        "show": "[Controller_Section_Status] = \"Diperiksa\"",
-        "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
-        "prefix": "Controller",
-        "help": ""
-      },
-      {
-        "name": "Controller_Guardian_Sync",
-        "label": "Sinkronisasi controller dengan Guardian",
-        "section": "Modul controller & komunikasi",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "[Controller_Section_Status] = \"Diperiksa\"",
-        "show": "[Controller_Section_Status] = \"Diperiksa\"",
-        "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
-        "prefix": "Controller",
-        "help": ""
-      },
-      {
-        "name": "Controller_SW_Version",
-        "label": "Versi software controller",
-        "section": "Modul controller & komunikasi",
-        "type": "Text",
-        "options": [],
-        "required": "FALSE",
-        "show": "[Controller_Section_Status] = \"Diperiksa\"",
-        "description": "Catat versi yang tampil; tidak melakukan upgrade/restart.",
-        "prefix": "Controller",
-        "help": ""
-      },
-      {
-        "name": "Controller_HDD_Free_Value",
-        "label": "Sisa kapasitas HDD",
-        "section": "Modul controller & komunikasi",
-        "type": "Decimal",
-        "options": [],
-        "required": "FALSE",
-        "show": "[Controller_Section_Status] = \"Diperiksa\"",
-        "description": "Isi nilai dan satuan sesuai display.",
-        "prefix": "Controller",
-        "help": "Isi pembacaan aktual; kosongkan jika tidak tersedia."
-      },
-      {
-        "name": "Controller_HDD_Free_Unit",
-        "label": "Satuan kapasitas HDD",
-        "section": "Modul controller & komunikasi",
-        "type": "Enum",
-        "options": [
-          "GB",
-          "TB",
-          "MB"
-        ],
-        "required": "AND([Controller_Section_Status] = \"Diperiksa\", ISNOTBLANK([Controller_HDD_Free_Value]))",
-        "show": "[Controller_Section_Status] = \"Diperiksa\"",
-        "description": "Isi sesuai display; jangan mengisi angka perkiraan atau nilai default.",
-        "prefix": "Controller",
-        "help": ""
-      },
-      {
-        "name": "Controller_Notes",
-        "label": "Catatan Modul controller & komunikasi",
-        "section": "Modul controller & komunikasi",
-        "type": "LongText",
-        "options": [],
-        "required": "OR([Controller_Section_Status] = \"Tidak diperiksa\", AND([Controller_Section_Status] = \"Diperiksa\", OR(IN([Controller_Module], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Controller_Cables_Connectors], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Controller_Alarm], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Controller_Camera_Transfer], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Controller_WNC_RDP], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Controller_PSV_Transmission], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Controller_Guardian_Sync], LIST(\"Ada masalah\", \"Tidak diperiksa\")))))",
-        "show": "TRUE",
-        "description": "Jelaskan temuan atau alasan bagian/item tidak diperiksa. Bagian N/A tidak wajib foto.",
-        "prefix": "Controller",
-        "help": "Wajib untuk masalah atau item yang tidak diperiksa."
       },
       {
         "name": "Controller_Image",
@@ -790,24 +522,7 @@ var WI_SCHEMAS_ = {
       },
       {
         "name": "Solar_Cleanliness",
-        "label": "Kebersihan panel",
-        "section": "Solar panel",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "[Solar_Section_Status] = \"Diperiksa\"",
-        "show": "[Solar_Section_Status] = \"Diperiksa\"",
-        "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
-        "prefix": "Solar",
-        "help": ""
-      },
-      {
-        "name": "Solar_Panel_Condition",
-        "label": "Kondisi fisik panel",
+        "label": "Kebersihan",
         "section": "Solar panel",
         "type": "Enum",
         "options": [
@@ -824,7 +539,7 @@ var WI_SCHEMAS_ = {
       },
       {
         "name": "Solar_Cables_Connectors",
-        "label": "Kabel dan konektor solar",
+        "label": "Kabel",
         "section": "Solar panel",
         "type": "Enum",
         "options": [
@@ -841,7 +556,7 @@ var WI_SCHEMAS_ = {
       },
       {
         "name": "Solar_Mounting",
-        "label": "Mounting panel",
+        "label": "Solar panel mounting",
         "section": "Solar panel",
         "type": "Enum",
         "options": [
@@ -855,80 +570,6 @@ var WI_SCHEMAS_ = {
         "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
         "prefix": "Solar",
         "help": ""
-      },
-      {
-        "name": "Solar_Surge_Protector",
-        "label": "Surge protector",
-        "section": "Solar panel",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "[Solar_Section_Status] = \"Diperiksa\"",
-        "show": "[Solar_Section_Status] = \"Diperiksa\"",
-        "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
-        "prefix": "Solar",
-        "help": ""
-      },
-      {
-        "name": "Solar_Charging",
-        "label": "Status supply / charging solar",
-        "section": "Solar panel",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "[Solar_Section_Status] = \"Diperiksa\"",
-        "show": "[Solar_Section_Status] = \"Diperiksa\"",
-        "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
-        "prefix": "Solar",
-        "help": ""
-      },
-      {
-        "name": "Solar_Output_Value",
-        "label": "Output solar pada display",
-        "section": "Solar panel",
-        "type": "Decimal",
-        "options": [],
-        "required": "FALSE",
-        "show": "[Solar_Section_Status] = \"Diperiksa\"",
-        "description": "Pembacaan saat inspeksi; bukan rata-rata 30 hari.",
-        "prefix": "Solar",
-        "help": "Isi pembacaan aktual; kosongkan jika tidak tersedia."
-      },
-      {
-        "name": "Solar_Output_Unit",
-        "label": "Satuan output solar",
-        "section": "Solar panel",
-        "type": "Enum",
-        "options": [
-          "W",
-          "V",
-          "A"
-        ],
-        "required": "AND([Solar_Section_Status] = \"Diperiksa\", ISNOTBLANK([Solar_Output_Value]))",
-        "show": "[Solar_Section_Status] = \"Diperiksa\"",
-        "description": "Isi sesuai display; jangan mengisi angka perkiraan atau nilai default.",
-        "prefix": "Solar",
-        "help": ""
-      },
-      {
-        "name": "Solar_Notes",
-        "label": "Catatan Solar panel",
-        "section": "Solar panel",
-        "type": "LongText",
-        "options": [],
-        "required": "OR([Solar_Section_Status] = \"Tidak diperiksa\", AND([Solar_Section_Status] = \"Diperiksa\", OR(IN([Solar_Cleanliness], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Solar_Panel_Condition], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Solar_Cables_Connectors], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Solar_Mounting], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Solar_Surge_Protector], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Solar_Charging], LIST(\"Ada masalah\", \"Tidak diperiksa\")))))",
-        "show": "TRUE",
-        "description": "Jelaskan temuan atau alasan bagian/item tidak diperiksa. Bagian N/A tidak wajib foto.",
-        "prefix": "Solar",
-        "help": "Wajib untuk masalah atau item yang tidak diperiksa."
       },
       {
         "name": "Solar_Image",
@@ -944,8 +585,8 @@ var WI_SCHEMAS_ = {
       },
       {
         "name": "Page_Weather",
-        "label": "Weather station",
-        "section": "Weather station",
+        "label": "Weather sensor",
+        "section": "Weather sensor",
         "type": "Show",
         "options": [],
         "required": "FALSE",
@@ -957,7 +598,7 @@ var WI_SCHEMAS_ = {
       {
         "name": "Weather_Section_Status",
         "label": "Status pemeriksaan bagian",
-        "section": "Weather station",
+        "section": "Weather sensor",
         "type": "Enum",
         "options": [
           "Diperiksa",
@@ -971,9 +612,9 @@ var WI_SCHEMAS_ = {
         "help": ""
       },
       {
-        "name": "Weather_Sensor_Cleanliness",
-        "label": "Kebersihan sensor cuaca",
-        "section": "Weather station",
+        "name": "Weather_General_Condition",
+        "label": "Kondisi umum",
+        "section": "Weather sensor",
         "type": "Enum",
         "options": [
           "Baik",
@@ -986,201 +627,11 @@ var WI_SCHEMAS_ = {
         "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
         "prefix": "Weather",
         "help": ""
-      },
-      {
-        "name": "Weather_Mast_Cables_Connectors",
-        "label": "Mast, kabel dan konektor",
-        "section": "Weather station",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "[Weather_Section_Status] = \"Diperiksa\"",
-        "show": "[Weather_Section_Status] = \"Diperiksa\"",
-        "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
-        "prefix": "Weather",
-        "help": ""
-      },
-      {
-        "name": "Weather_Readings_Available",
-        "label": "Ketersediaan pembacaan cuaca",
-        "section": "Weather station",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "[Weather_Section_Status] = \"Diperiksa\"",
-        "show": "[Weather_Section_Status] = \"Diperiksa\"",
-        "description": "Tanpa pilihan default. Untuk kebocoran/halangan/alarm: Baik berarti tidak ada kondisi bermasalah.",
-        "prefix": "Weather",
-        "help": ""
-      },
-      {
-        "name": "Weather_Rainfall_Value",
-        "label": "Rainfall",
-        "section": "Weather station",
-        "type": "Decimal",
-        "options": [],
-        "required": "FALSE",
-        "show": "[Weather_Section_Status] = \"Diperiksa\"",
-        "description": "Catat periode dan satuan sesuai display; nol hanya bila terbaca nol.",
-        "prefix": "Weather",
-        "help": "Isi pembacaan aktual; kosongkan jika tidak tersedia."
-      },
-      {
-        "name": "Weather_Rainfall_Unit",
-        "label": "Satuan rainfall",
-        "section": "Weather station",
-        "type": "Text",
-        "options": [],
-        "required": "AND([Weather_Section_Status] = \"Diperiksa\", ISNOTBLANK([Weather_Rainfall_Value]))",
-        "show": "[Weather_Section_Status] = \"Diperiksa\"",
-        "description": "Isi sesuai display; jangan mengisi angka perkiraan atau nilai default.",
-        "prefix": "Weather",
-        "help": ""
-      },
-      {
-        "name": "Weather_Rainfall_Period",
-        "label": "Periode rainfall pada display",
-        "section": "Weather station",
-        "type": "Text",
-        "options": [],
-        "required": "FALSE",
-        "show": "[Weather_Section_Status] = \"Diperiksa\"",
-        "description": "Misalnya akumulasi hari ini atau periode yang tampil; jangan diasumsikan.",
-        "prefix": "Weather",
-        "help": ""
-      },
-      {
-        "name": "Weather_Temperature_Value",
-        "label": "Temperature",
-        "section": "Weather station",
-        "type": "Decimal",
-        "options": [],
-        "required": "FALSE",
-        "show": "[Weather_Section_Status] = \"Diperiksa\"",
-        "description": "Isi sesuai display; jangan mengisi angka perkiraan atau nilai default.",
-        "prefix": "Weather",
-        "help": "Isi pembacaan aktual; kosongkan jika tidak tersedia."
-      },
-      {
-        "name": "Weather_Temperature_Unit",
-        "label": "Satuan temperature",
-        "section": "Weather station",
-        "type": "Enum",
-        "options": [
-          "°C",
-          "°F"
-        ],
-        "required": "AND([Weather_Section_Status] = \"Diperiksa\", ISNOTBLANK([Weather_Temperature_Value]))",
-        "show": "[Weather_Section_Status] = \"Diperiksa\"",
-        "description": "Isi sesuai display; jangan mengisi angka perkiraan atau nilai default.",
-        "prefix": "Weather",
-        "help": ""
-      },
-      {
-        "name": "Weather_Pressure_Value",
-        "label": "Barometric pressure",
-        "section": "Weather station",
-        "type": "Decimal",
-        "options": [],
-        "required": "FALSE",
-        "show": "[Weather_Section_Status] = \"Diperiksa\"",
-        "description": "Isi sesuai display; jangan mengisi angka perkiraan atau nilai default.",
-        "prefix": "Weather",
-        "help": "Isi pembacaan aktual; kosongkan jika tidak tersedia."
-      },
-      {
-        "name": "Weather_Pressure_Unit",
-        "label": "Satuan pressure",
-        "section": "Weather station",
-        "type": "Enum",
-        "options": [
-          "hPa",
-          "mbar",
-          "kPa",
-          "Pa"
-        ],
-        "required": "AND([Weather_Section_Status] = \"Diperiksa\", ISNOTBLANK([Weather_Pressure_Value]))",
-        "show": "[Weather_Section_Status] = \"Diperiksa\"",
-        "description": "Isi sesuai display; jangan mengisi angka perkiraan atau nilai default.",
-        "prefix": "Weather",
-        "help": ""
-      },
-      {
-        "name": "Weather_Humidity_Percent",
-        "label": "Humidity (%)",
-        "section": "Weather station",
-        "type": "Decimal",
-        "options": [],
-        "required": "FALSE",
-        "show": "[Weather_Section_Status] = \"Diperiksa\"",
-        "description": "Isi sesuai display; jangan mengisi angka perkiraan atau nilai default.",
-        "prefix": "Weather",
-        "help": "Isi pembacaan aktual; kosongkan jika tidak tersedia."
-      },
-      {
-        "name": "Weather_Wind_Speed_Value",
-        "label": "Wind speed",
-        "section": "Weather station",
-        "type": "Decimal",
-        "options": [],
-        "required": "FALSE",
-        "show": "[Weather_Section_Status] = \"Diperiksa\"",
-        "description": "Isi sesuai display; jangan mengisi angka perkiraan atau nilai default.",
-        "prefix": "Weather",
-        "help": "Isi pembacaan aktual; kosongkan jika tidak tersedia."
-      },
-      {
-        "name": "Weather_Wind_Speed_Unit",
-        "label": "Satuan wind speed",
-        "section": "Weather station",
-        "type": "Enum",
-        "options": [
-          "m/s",
-          "km/h",
-          "knots"
-        ],
-        "required": "AND([Weather_Section_Status] = \"Diperiksa\", ISNOTBLANK([Weather_Wind_Speed_Value]))",
-        "show": "[Weather_Section_Status] = \"Diperiksa\"",
-        "description": "Isi sesuai display; jangan mengisi angka perkiraan atau nilai default.",
-        "prefix": "Weather",
-        "help": ""
-      },
-      {
-        "name": "Weather_Wind_Direction",
-        "label": "Wind direction sesuai display",
-        "section": "Weather station",
-        "type": "Text",
-        "options": [],
-        "required": "FALSE",
-        "show": "[Weather_Section_Status] = \"Diperiksa\"",
-        "description": "Catat arah atau derajat beserta satuannya.",
-        "prefix": "Weather",
-        "help": ""
-      },
-      {
-        "name": "Weather_Notes",
-        "label": "Catatan Weather station",
-        "section": "Weather station",
-        "type": "LongText",
-        "options": [],
-        "required": "OR([Weather_Section_Status] = \"Tidak diperiksa\", AND([Weather_Section_Status] = \"Diperiksa\", OR(IN([Weather_Sensor_Cleanliness], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Weather_Mast_Cables_Connectors], LIST(\"Ada masalah\", \"Tidak diperiksa\")), IN([Weather_Readings_Available], LIST(\"Ada masalah\", \"Tidak diperiksa\")))))",
-        "show": "TRUE",
-        "description": "Jelaskan temuan atau alasan bagian/item tidak diperiksa. Bagian N/A tidak wajib foto.",
-        "prefix": "Weather",
-        "help": "Wajib untuk masalah atau item yang tidak diperiksa."
       },
       {
         "name": "Weather_Image",
-        "label": "Foto Weather station",
-        "section": "Weather station",
+        "label": "Foto weather sensor",
+        "section": "Weather sensor",
         "type": "Image",
         "options": [],
         "required": "[Weather_Section_Status] = \"Diperiksa\"",
@@ -1565,7 +1016,7 @@ var WI_SCHEMAS_ = {
       "Genset",
       "Modul controller & komunikasi",
       "Solar panel",
-      "Weather station",
+      "Weather sensor",
       "Trailer / container & keselamatan",
       "Temuan & tindak lanjut"
     ]
@@ -1968,23 +1419,8 @@ var WI_SCHEMAS_ = {
         "help": ""
       },
       {
-        "name": "RTS_Network_Moxa_Power",
-        "label": "Indikator power Moxa",
-        "section": "Moxa & jaringan",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "TRUE",
-        "prefix": "RTS_Network",
-        "help": ""
-      },
-      {
-        "name": "RTS_Network_Moxa_Link",
-        "label": "Indikator link/activity Moxa",
+        "name": "RTS_Network_Moxa_Indicator",
+        "label": "Indikator Moxa",
         "section": "Moxa & jaringan",
         "type": "Enum",
         "options": [
@@ -1999,7 +1435,7 @@ var WI_SCHEMAS_ = {
       },
       {
         "name": "RTS_Network_Cables",
-        "label": "Kabel ethernet/serial, konektor, dan antena",
+        "label": "Kondisi kabel",
         "section": "Moxa & jaringan",
         "type": "Enum",
         "options": [
@@ -2008,91 +1444,6 @@ var WI_SCHEMAS_ = {
           "Tidak diperiksa",
           "Tidak berlaku (N/A)"
         ],
-        "required": "TRUE",
-        "prefix": "RTS_Network",
-        "help": ""
-      },
-      {
-        "name": "RTS_Network_Acquisition",
-        "label": "Status koneksi alat ke sistem akuisisi",
-        "section": "Moxa & jaringan",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "TRUE",
-        "prefix": "RTS_Network",
-        "help": ""
-      },
-      {
-        "name": "RTS_Network_Latest_Data",
-        "label": "Waktu data terakhir sesuai interval monitoring",
-        "section": "Moxa & jaringan",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "TRUE",
-        "prefix": "RTS_Network",
-        "help": ""
-      },
-      {
-        "name": "RTS_Network_Remote",
-        "label": "Akses jaringan/remote dari lokasi pemeriksaan",
-        "section": "Moxa & jaringan",
-        "type": "Enum",
-        "options": [
-          "Baik",
-          "Ada masalah",
-          "Tidak diperiksa",
-          "Tidak berlaku (N/A)"
-        ],
-        "required": "TRUE",
-        "prefix": "RTS_Network",
-        "help": ""
-      },
-      {
-        "name": "RTS_Network_Last_Data_Time",
-        "label": "Waktu data terakhir (WIB)",
-        "section": "Moxa & jaringan",
-        "type": "DateTime",
-        "options": [],
-        "required": "FALSE",
-        "prefix": "RTS_Network",
-        "help": "Catat pembacaan display; tidak mengubah leveling, resection, atau konfigurasi alat."
-      },
-      {
-        "name": "RTS_Network_IP_Label",
-        "label": "IP/label jaringan jika diperlukan",
-        "section": "Moxa & jaringan",
-        "type": "Text",
-        "options": [],
-        "required": "FALSE",
-        "prefix": "RTS_Network",
-        "help": "Catat pembacaan display; tidak mengubah leveling, resection, atau konfigurasi alat."
-      },
-      {
-        "name": "RTS_Network_Notes",
-        "label": "Catatan / alasan tidak diperiksa",
-        "section": "Moxa & jaringan",
-        "type": "LongText",
-        "options": [],
-        "required": "FALSE",
-        "prefix": "RTS_Network",
-        "help": ""
-      },
-      {
-        "name": "RTS_Network_Image",
-        "label": "Foto Moxa & jaringan",
-        "section": "Moxa & jaringan",
-        "type": "Image",
-        "options": [],
         "required": "TRUE",
         "prefix": "RTS_Network",
         "help": ""
@@ -2528,16 +1879,16 @@ function validDate_(value,time) {
   var y=Number(m[1]),month=Number(m[2]),day=Number(m[3]),d=new Date(Date.UTC(y,month-1,day));
   return y>=2000&&y<=2100&&d.getUTCFullYear()===y&&d.getUTCMonth()===month-1&&d.getUTCDate()===day&&(!time||(Number(m[4])<24&&Number(m[5])<60));
 }
-function validate_(type,input,imageNames) {
-  var spec=schema_(type),answers={},errors=[],images=new Set(imageNames),add=function(field,message){errors.push({field:field,message:message});};
+function validate_(type,input,imageNames,extraOptions) {
+  var spec=schema_(type),answers={},errors=[],images=new Set(imageNames),names=new Set(spec.fields.map(function(f){return f.name;})),add=function(field,message){errors.push({field:field,message:message});};
   input=input&&typeof input==='object'&&!Array.isArray(input)?input:{};
   spec.fields.forEach(function(f){answers[f.name]='';});
   spec.fields.forEach(function(f){
     if(!activeField_(f,input)||f.type==='Image')return;
     var value=typeof input[f.name]==='string'?input[f.name].trim():'';answers[f.name]=value;
     if(value.length>(f.type==='LongText'?5000:250))add(f.name,'Jawaban terlalu panjang.');
-    if(f.type==='Enum'&&value&&f.options.indexOf(value)<0)add(f.name,'Pilih jawaban yang tersedia.');
-    if(f.type==='Decimal'&&value){var normal=value.replace(',','.');if(!/^[+-]?(?:\d+\.?\d*|\.\d+)$/.test(normal)||!Number.isFinite(Number(normal)))add(f.name,'Masukkan angka yang valid.');else {var n=Number(normal),signed=/Temperature|Tilt_[XY]/.test(f.name);if(!signed&&n<0)add(f.name,'Nilai tidak boleh negatif.');else if(/Humidity/.test(f.name)&&(n<0||n>100))add(f.name,'Humidity harus 0–100%.');else answers[f.name]=String(n);}}
+    if(f.type==='Enum'&&value&&f.options.concat((extraOptions&&extraOptions[f.name])||[]).indexOf(value)<0)add(f.name,'Pilih jawaban yang tersedia.');
+    if(f.type==='Decimal'&&value){var normal=value.replace(',','.');if(!/^[+-]?(?:\d+\.?\d*|\.\d+)$/.test(normal)||!Number.isFinite(Number(normal)))add(f.name,'Masukkan angka yang valid.');else {var n=Number(normal),signed=/Tilt_[XY]/.test(f.name);if(!signed&&n<0)add(f.name,'Nilai tidak boleh negatif.');else answers[f.name]=String(n);}}
     if((f.type==='Date'||f.type==='DateTime')&&value&&!validDate_(value,f.type==='DateTime'))add(f.name,'Tanggal/jam tidak valid.');
     if((f.required==='TRUE'||(f.type==='Enum'&&f.options.indexOf('Baik')>=0))&&!value)add(f.name,'Wajib diisi.');
   });
@@ -2547,11 +1898,11 @@ function validate_(type,input,imageNames) {
     var prefix=statusField.prefix,status=answers[statusField.name],checks=spec.fields.filter(function(f){return f.prefix===prefix&&f.type==='Enum'&&f.options.indexOf('Baik')>=0;});
     var issue=status==='Diperiksa'&&checks.some(function(f){return answers[f.name]==='Ada masalah';});problem=problem||issue;
     var skipped=status==='Tidak diperiksa'||(status==='Diperiksa'&&checks.some(function(f){return answers[f.name]==='Tidak diperiksa';}));
-    if((issue||skipped)&&!answers[prefix+'_Notes'])add(prefix+'_Notes','Jelaskan temuan atau alasan tidak diperiksa.');
-    if(status==='Diperiksa'&&!images.has(prefix+'_Image'))add(prefix+'_Image','Lampirkan foto bagian yang diperiksa.');
+    if((issue||skipped)&&names.has(prefix+'_Notes')&&!answers[prefix+'_Notes'])add(prefix+'_Notes','Jelaskan temuan atau alasan tidak diperiksa.');
+    if(status==='Diperiksa'&&names.has(prefix+'_Image')&&!images.has(prefix+'_Image'))add(prefix+'_Image','Lampirkan foto bagian yang diperiksa.');
   });
   if(problem&&!answers.Findings_Description)add('Findings_Description','Rangkum temuan yang perlu ditindaklanjuti.');
-  var pairs=type==='RADAR'?[['Controller_HDD_Free_Value','Controller_HDD_Free_Unit'],['Solar_Output_Value','Solar_Output_Unit'],['Weather_Rainfall_Value','Weather_Rainfall_Unit'],['Weather_Temperature_Value','Weather_Temperature_Unit'],['Weather_Pressure_Value','Weather_Pressure_Unit'],['Weather_Wind_Speed_Value','Weather_Wind_Speed_Unit']]:[['RTS_Instrument_Tilt_X','RTS_Instrument_Tilt_Unit'],['RTS_Instrument_Tilt_Y','RTS_Instrument_Tilt_Unit']];
+  var pairs=type==='RADAR'?[]:[['RTS_Instrument_Tilt_X','RTS_Instrument_Tilt_Unit'],['RTS_Instrument_Tilt_Y','RTS_Instrument_Tilt_Unit']];
   pairs.forEach(function(pair){if(answers[pair[0]]!==''&&!answers[pair[1]])add(pair[1],'Isi satuan sesuai display.');});
   return {answers:answers,errors:errors};
 }

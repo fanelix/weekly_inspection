@@ -10,7 +10,7 @@ Drive adalah penyimpanan utama. Folder tujuan adalah `1JoaN3UkwcEGNGo0awHsOdQgkW
 
 ## Form
 
-Radar mempertahankan checklist SV-2248 April 2026: general, genset, controller/komunikasi, solar, weather, trailer/container, dan temuan. Pembacaan tidak diisi nol otomatis; satuan mengikuti display. RTS Leica TM60: alat/nivo/kebersihan, panel kelistrikan, Moxa/jaringan, solar, baterai/charge controller, dudukan/area, dan temuan. Kalibrasi/resection/restart bukan tindakan otomatis form.
+Radar mempertahankan checklist SV-2248 April 2026: general, genset, controller, solar, weather sensor, trailer/container, dan temuan. Genset hanya menampilkan kondisi visual, fuel level, oil level, nomor genset, tegangan baterai, catatan, dan foto; Controller kondisi umum, kondisi laptop, dan foto; Solar kebersihan, kabel, mounting, dan foto; Weather sensor kondisi umum dan foto. Bagian tanpa kolom catatan atau foto di schema tidak mewajibkannya; temuan masalah dirangkum pada halaman Temuan. Pembacaan tidak diisi nol otomatis; satuan mengikuti display. RTS Leica TM60: alat/nivo/kebersihan, panel kelistrikan, Moxa/jaringan, solar, baterai/charge controller, dudukan/area, dan temuan. Kalibrasi/resection/restart bukan tindakan otomatis form.
 
 Status bagian: Diperiksa, Tidak diperiksa, Tidak berlaku (N/A). Bagian yang diperiksa wajib checklist dan satu foto. Temuan atau item tidak diperiksa wajib catatan. Pilihan kondisi tidak dipilih otomatis. Data tersembunyi pada bagian N/A diabaikan. Foto tambahan temuan opsional. Maksimum foto 1 MB, total 8 MB; browser mengompres sebelum pengiriman.
 
