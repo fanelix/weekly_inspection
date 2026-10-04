@@ -1,10 +1,7 @@
 # Logo PT Bumi Suksesindo
 
-Letakkan file logo resmi dari sumber aslinya di folder ini dengan nama:
+`bsi-logo.png` adalah logo resmi yang ditampilkan di header. Untuk menggantinya, timpa file ini dengan berkas resmi baru bernama `bsi-logo.png`, atau tambahkan `bsi-logo.svg` (dipakai bila PNG tidak ada).
 
-- `bsi-logo.svg` (diutamakan), atau
-- `bsi-logo.png`
+Header menampilkan logo pada latar putih di sebelah nama aplikasi, sehingga terbaca pada mode terang maupun gelap. Tinggi tampilan 56 px di desktop, 40 px di tablet, dan 34 px di HP; PNG saat ini 523 × 300 px. Bila file hilang, slot logo tersembunyi dan header hanya menampilkan teks "BSI / Geotech".
 
-Header memuat file ini otomatis dan menampilkannya pada latar putih di sebelah nama aplikasi, sehingga terbaca pada mode terang maupun gelap. Selama file belum ada, slot logo tersembunyi dan header hanya menampilkan teks "BSI / Geotech".
-
-Jangan menggambar ulang atau memperkirakan logo; gunakan berkas resmi. Tinggi tampilan 44 px di desktop dan 28–32 px di layar kecil; gunakan PNG minimal 3× (±400 px lebar) bila bukan SVG.
+Jangan menggambar ulang atau memperkirakan logo; gunakan berkas resmi.
